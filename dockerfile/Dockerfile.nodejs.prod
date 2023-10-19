@@ -1,0 +1,24 @@
+# BUILDING PROCESS
+FROM node:20 AS build
+WORKDIR /app
+
+COPY ./src/package*.json ./
+
+RUN yarn install
+
+COPY ./src .
+
+RUN yarn build
+
+# RUNNING PROCESS
+
+FROM node:20-alpine
+WORKDIR /app
+
+COPY --from=build /app/node_modules ./node_modules
+
+COPY --from=build /app/dist ./dist
+
+EXPOSE 3000
+
+CMD ["node", "dist/index.js"]

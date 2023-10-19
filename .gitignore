@@ -1,0 +1,6 @@
+src/node_modules
+src/dist/*.js
+docker.env
+.env
+src/.env
+*.key

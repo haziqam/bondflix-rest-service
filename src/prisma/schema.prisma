@@ -21,3 +21,41 @@ model User {
   isAdmin        Boolean
   hashedPassword String
 }
+
+model Content {
+  id                  Int       @id @default(autoincrement())
+  title               String
+  description         String
+  release_date        DateTime
+  content_file_path   String
+  thumbnail_file_path String
+  uploaded_at         DateTime
+  genres              Genre[]
+  categories          Category[]
+  directors           Director[]
+  actors              Actor[]
+}
+
+model Genre {
+  id      Int    @id @default(autoincrement())
+  name    String
+  content Content[]
+}
+
+model Category {
+  id      Int    @id @default(autoincrement())
+  name    String
+  content Content[]
+}
+
+model Director {
+  id      Int    @id @default(autoincrement())
+  name    String
+  content Content[]
+}
+
+model Actor {
+  id      Int    @id @default(autoincrement())
+  name    String
+  content Content[]
+}

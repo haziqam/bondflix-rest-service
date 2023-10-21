@@ -20,10 +20,20 @@ export class ContentRepositoryPrisma implements ContentRepository {
         return prisma.content.findUnique({ where: { id } });
     }
 
-    async update(content: Content) {
+    async update(content: Partial<Content>) {
+        const contentId = content.id;
+
+        if (contentId === undefined) {
+            throw new Error('Content ID is required for update.');
+        }
+
         await prisma.content.update({
-            where: { id: content.id },
+            where: { id: contentId },
             data: content,
         });
+    }
+
+    async findAll() {
+        return prisma.content.findMany();
     }
 }

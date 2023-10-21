@@ -1,7 +1,14 @@
 import jwt from 'jsonwebtoken';
 import fs from 'fs';
 
-export function signJWT(payload: object, expiresIn: string | number) {
+interface JwtClaims {
+    userId: number;
+    username: string;
+    expiresIn: number;
+    issuedAt: number;
+}
+
+export function signJWT(payload: JwtClaims, expiresIn: string | number) {
     const privateKey = fs.readFileSync('private.key');
     const algorithmType = 'RS256';
     return jwt.sign(

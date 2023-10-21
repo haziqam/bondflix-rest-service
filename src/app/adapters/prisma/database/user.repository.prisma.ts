@@ -29,4 +29,15 @@ export class UserRepositoryPrisma implements UserRepository {
             data: user,
         });
     }
+
+    async findUserByIdentifier(identifier: string) {
+        return prisma.user.findFirst({
+            where: {
+                OR: [
+                    { username: identifier },
+                    { email: identifier },
+                ],
+            },
+        });
+    }
 }

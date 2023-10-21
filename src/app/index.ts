@@ -3,8 +3,7 @@ import dotEnv from 'dotenv';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import {routes} from "./routes";
-import {initializeContainers} from "./bootstrap";
-import {ControllerContainer} from "./containers/controller.container";
+import {initContainer} from "./bootstrap";
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -18,11 +17,10 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 
-const containers: { controllerContainer: ControllerContainer } = initializeContainers();
-routes(app, containers.controllerContainer);
+const serviceContainer = initContainer();
+routes(app, serviceContainer);
 const startServer = async () => {
-    try {
-        app.listen(port, () => {
+    try {app.listen(port, () => {
             console.log(`Server is running on port ${port}`);
         })
     } catch (error) {

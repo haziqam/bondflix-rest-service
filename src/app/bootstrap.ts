@@ -1,10 +1,10 @@
-import { PrismaClient } from "@prisma/client";
-import { RepositoryContainer } from './containers/repository.container';
-import { ServiceContainer } from "./containers/service.container";
-import { UserRepositoryPrisma } from "./adapters/prisma/database/user.repository.prisma";
-import { ControllerContainer } from "./containers/controller.container";
+import {PrismaClient} from "@prisma/client";
+import {RepositoryContainer} from './containers/repository.container';
+import {ServiceContainer} from "./containers/service.container";
+import {UserRepositoryPrisma} from "./adapters/prisma/database/user.repository.prisma";
 
-export const initializeContainers = () => {
+
+export function initContainer() : ServiceContainer {
     /**
      * Initialize Prisma Client
      */
@@ -28,14 +28,5 @@ export const initializeContainers = () => {
     /**
      * Initialize Services
      */
-    const serviceContainer = ServiceContainer.getInstance(repositoryContainer);
-
-    /**
-     * Initialize Handlers
-     */
-    const controllerContainer = ControllerContainer.getInstance(serviceContainer);
-
-    return {
-        controllerContainer,
-    };
-};
+    return ServiceContainer.getInstance(repositoryContainer);
+}

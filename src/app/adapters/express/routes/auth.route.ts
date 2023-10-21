@@ -1,10 +1,13 @@
-import { Router } from 'express';
-import { ControllerContainer } from '../../../containers/controller.container';
+import {Request, Response, Router} from 'express';
+import {UserController} from "../../../application/controllers/user.controller";
 
-export default function authRoutes(containers: ControllerContainer) {
+export function authRoutes(controller: UserController): Router {
     const router = Router();
-
-    router.post('/login', containers.userController.login);
-
+    router.post('/login', (req: Request, res: Response) => {
+        controller.login(req, res).then(r => {});
+    })
     return router;
 }
+
+
+

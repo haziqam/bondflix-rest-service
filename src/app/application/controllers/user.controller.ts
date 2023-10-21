@@ -36,6 +36,9 @@ export class UserController {
     async login(req: Request, res: Response) {
         try {
             const { identifier, password } = LoginSchema.parse(req.body);
+            // const repositoryContainer = RepositoryContainer.getInstance(new UserRepositoryPrisma());
+            // const serviceContainer = ServiceContainer.getInstance(repositoryContainer);
+            // const userService = serviceContainer.userService;
             const user: User | null = await this.userService.authenticate(identifier, password);
             if (user) {
                 return ResponseUtil.sendResponse(res, 200, "Login successful", {
@@ -43,7 +46,7 @@ export class UserController {
                     token: password
                 })
             } else {
-                return  ResponseUtil.sendError(res, 404, "Authentication failed", null);
+                return ResponseUtil.sendError(res, 404, "Authentication failed", null);
             }
         } catch (error) {
             return ResponseUtil.sendError(res, 500, "Internal server error", error);

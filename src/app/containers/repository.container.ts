@@ -1,21 +1,21 @@
 import { UserRepository } from '../interfaces/repositories/user.repository';
 
 export class RepositoryContainer {
-    private static instance: RepositoryContainer | null = null;
-    private _userRepository: UserRepository;
+    private static instance: RepositoryContainer;
+    private userRepository: UserRepository;
 
     private constructor(userRepository: UserRepository) {
-        this._userRepository = userRepository;
+        this.userRepository = userRepository;
     }
 
-    static getInstance(userRepository: UserRepository): RepositoryContainer {
+    public static getInstance(userRepository: UserRepository): RepositoryContainer {
         if (!RepositoryContainer.instance) {
             RepositoryContainer.instance = new RepositoryContainer(userRepository);
         }
         return RepositoryContainer.instance;
     }
 
-    get userRepository(): UserRepository {
-        return this._userRepository;
+    public getUserRepository(): UserRepository {
+        return this.userRepository;
     }
 }

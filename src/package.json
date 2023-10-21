@@ -5,7 +5,8 @@
   "main": "./app/index.ts",
   "scripts": {
     "build": "tsc",
-    "start": "nodemon -L"
+    "start": "nodemon -L",
+    "migrate": "npx prisma migrate dev"
   },
   "keywords": [],
   "author": "",

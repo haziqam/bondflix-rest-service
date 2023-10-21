@@ -32,8 +32,10 @@ export class UserService implements UserService {
         const jwtClaims = {
             userId: user.id,
             username: user.username,
+            name: user.name,
             expiresIn: 60 * 60 * 3,
             issuedAt: Math.floor(Date.now() / 1000),
+            isAdmin: user.isAdmin,
         };
 
         return signJWT(jwtClaims, "3h");
@@ -45,10 +47,11 @@ export class UserService implements UserService {
         if (hashedPassword) {
             //@ts-ignore
             const newUser: User = {
-                username,
-                name,
-                email,
-                hashedPassword,
+                username: username,
+                name: name,
+                email: email,
+                isAdmin: false,
+                hashedPassword: hashedPassword,
             };
 
             //@ts-ignore

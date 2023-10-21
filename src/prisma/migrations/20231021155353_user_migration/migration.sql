@@ -4,6 +4,7 @@ CREATE TABLE "User" (
     "username" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
+    "isAdmin" BOOLEAN NOT NULL,
     "hashedPassword" TEXT NOT NULL,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")

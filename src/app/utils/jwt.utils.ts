@@ -4,8 +4,10 @@ import fs from 'fs';
 interface JwtClaims {
     userId: number;
     username: string;
+    name: string;
     expiresIn: number;
     issuedAt: number;
+    isAdmin: boolean;
 }
 
 export function signJWT(payload: JwtClaims, expiresIn: string | number) {

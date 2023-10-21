@@ -3,6 +3,8 @@ import dotEnv from 'dotenv';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import {routes} from "./routes";
+import {initializeContainers} from "./bootstrap";
+import {ControllerContainer} from "./containers/controller.container";
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -16,7 +18,8 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 
-routes(app);
+const containers: { controllerContainer: ControllerContainer } = initializeContainers();
+routes(app, containers.controllerContainer);
 const startServer = async () => {
     try {
         app.listen(port, () => {

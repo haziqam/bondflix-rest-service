@@ -1,10 +1,10 @@
 import { Router } from 'express';
 import { ControllerContainer } from '../../../containers/controller.container';
 
-export default function userRoutes(containers: ControllerContainer) {
+export default function authRoutes(containers: ControllerContainer) {
     const router = Router();
 
-    router.get('/', containers.userController.getUser);
+    router.post('/login', containers.userController.login);
 
     return router;
 }

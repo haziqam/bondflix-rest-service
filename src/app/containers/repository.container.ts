@@ -1,4 +1,4 @@
-import { UserRepository } from '../interfaces/repositories/user.repository';
+import {UserRepository} from '../interfaces/repositories/user.repository';
 
 export class RepositoryContainer {
     private static instance: RepositoryContainer;

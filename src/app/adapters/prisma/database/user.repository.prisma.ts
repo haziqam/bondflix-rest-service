@@ -1,5 +1,6 @@
 import {PrismaClient, User} from '@prisma/client';
-import { UserRepository } from '../../../interfaces/repositories/user.repository';
+import {UserRepository} from '../../../interfaces/repositories/user.repository';
+
 const prisma = new PrismaClient();
 export class UserRepositoryPrisma implements UserRepository {
     async create(user: User) {

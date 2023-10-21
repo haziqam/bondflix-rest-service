@@ -1,5 +1,5 @@
-import { UserService } from '../application/services/user.service';
-import { RepositoryContainer } from './repository.container';
+import {UserService} from '../application/services/user.service';
+import {RepositoryContainer} from './repository.container';
 
 export class ServiceContainer {
     private static instance: ServiceContainer;

@@ -1,11 +1,8 @@
-import { Request, Response } from 'express';
+import {Request, Response} from 'express';
 import {UserService} from "../services/user.service";
 import {ResponseUtil} from "../../utils/response.utils";
 import {LoginSchema} from "../../schema/auth/login.schema";
 import {User} from "@prisma/client";
-import {ServiceContainer} from "../../containers/service.container";
-import {RepositoryContainer} from "../../containers/repository.container";
-import {UserRepositoryPrisma} from "../../adapters/prisma/database/user.repository.prisma";
 
 /**
  * What to do in Controllers:

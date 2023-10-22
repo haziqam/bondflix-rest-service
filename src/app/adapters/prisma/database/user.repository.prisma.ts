@@ -23,7 +23,12 @@ export class UserRepositoryPrisma implements UserRepository {
         return prisma.user.findFirst({ where: { username } });
     }
 
-    async update(user : User) {
+    async update(user : Partial<User>) {
+        const userId = user.id;
+
+        if (userId === undefined) {
+            throw new Error('User ID is required for update.');
+        }
         await prisma.user.update({
             where: { id: user.id },
             data: user,
@@ -39,5 +44,9 @@ export class UserRepositoryPrisma implements UserRepository {
                 ],
             },
         });
+    }
+
+    async findAll() {
+        return prisma.user.findMany();
     }
 }

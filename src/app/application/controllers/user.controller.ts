@@ -3,6 +3,8 @@ import {UserService} from "../services/user.service";
 import {ResponseUtil} from "../../utils/response.utils";
 import {LoginSchema} from "../../schema/auth/login.schema";
 import {RegisterSchema} from "../../schema/auth/register.schema";
+import {CreateUserSchema} from "../../schema/user/create_user.schema";
+import {UpdateUserSchema} from "../../schema/user/update_user.schema";
 
 /**
  * What to do in Controllers:
@@ -18,15 +20,83 @@ export class UserController {
         this.userService = userService;
     }
 
-    async getUser(req: Request, res: Response) {
+    async getUsers(req: Request, res: Response) {
         try {
-            const dataUser = {
-                username: "user",
-                email: "test"
+            const username  = req.query.username as string;
+            if (username) {
+                const user = await this.userService.findUserByUsername(username);
+                if (user) {
+                    return ResponseUtil.sendResponse(res, 200, "User retrieved successfully", user);
+                } else {
+                    return ResponseUtil.sendError(res, 404, "User not found", null);
+                }
+            } else {
+                const allUsers = await this.userService.getAllUsers();
+
+                if (allUsers && allUsers.length > 0) {
+                    return ResponseUtil.sendResponse(res, 200, 'Success', allUsers);
+                } else {
+                    return ResponseUtil.sendResponse(res, 404, 'No user found', null);
+                }
             }
-            return ResponseUtil.sendResponse(res, 200, "Success fetch data", dataUser);
         } catch (error) {
-            return ResponseUtil.sendError(res, 500, "Internal server error", null);
+            return ResponseUtil.sendError(res, 500, "Unable to process data", null);
+        }
+    }
+
+    async createUser(req: Request, res: Response) {
+        try {
+            const { username, name, email, password, isAdmin } = CreateUserSchema.parse(req.body);
+            const success = await this.userService.createUser(username, name, email, password, isAdmin);
+            if (success) {
+                return ResponseUtil.sendResponse(res, 200, "User created successfully", null);
+            } else {
+                return ResponseUtil.sendError(res, 404, "User not found", null);
+            }
+        } catch (error) {
+            return ResponseUtil.sendError(res, 500, "Unable to process data", null);
+        }
+    }
+
+    async updateUser(req: Request, res: Response) {
+        try {
+            const userId = parseInt(req.params.id, 10);
+            const {...updatedUser} = UpdateUserSchema.parse(req.body);
+            const success = await this.userService.updateUser(userId, updatedUser);
+            if (success) {
+                return ResponseUtil.sendResponse(res, 200, "User updated successfully", null);
+            } else {
+                return ResponseUtil.sendError(res, 404, "User not found", null);
+            }
+        } catch (error) {
+            return ResponseUtil.sendError(res, 500, "Unable to process data", null);
+        }
+    }
+
+    async deleteUser(req: Request, res: Response) {
+        try {
+            const id = parseInt(req.params.id, 10);
+            const success = await this.userService.deleteUser(id);
+            if (success) {
+                return ResponseUtil.sendResponse(res, 200, "User deleted successfully", null);
+            } else {
+                return ResponseUtil.sendError(res, 404, "User not found", null);
+            }
+        } catch (error) {
+            return ResponseUtil.sendError(res, 500, "Unable to process data", null);
+        }
+    }
+    async getUserById(req: Request, res: Response) {
+        try {
+            const id = parseInt(req.params.id, 10);
+            const user = await this.userService.findUserById(id);
+            if (user) {
+                return ResponseUtil.sendResponse(res, 200, "User retrieved successfully", user);
+            } else {
+                return ResponseUtil.sendError(res, 404, "User not found", null);
+            }
+        } catch (error) {
+            return ResponseUtil.sendError(res, 500, "Unable to process data", null);
         }
     }
 
@@ -42,21 +112,21 @@ export class UserController {
                 return ResponseUtil.sendError(res, 404, "Authentication failed", null);
             }
         } catch (error) {
-            return ResponseUtil.sendError(res, 500, "Internal server error", error);
+            return ResponseUtil.sendError(res, 500, "Unable to process data", error);
         }
     }
 
     async signup(req: Request, res: Response) {
         try {
             const {username, name, email, password} = RegisterSchema.parse(req.body);
-            const success = await this.userService.register(username, name, email, password);
+            const success = await this.userService.createUser(username, name, email, password, false);
             if (success) {
                 return ResponseUtil.sendResponse(res, 200, "Registration successful", null);
             } else {
                 return ResponseUtil.sendError(res, 500, "Registration failed", null);
             }
         } catch (error) {
-            return ResponseUtil.sendError(res, 500, "Internal server error", error);
+            return ResponseUtil.sendError(res, 500, "Unable to process data", error);
         }
     }
 }

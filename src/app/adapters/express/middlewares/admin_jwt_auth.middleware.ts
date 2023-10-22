@@ -1,6 +1,6 @@
-import { NextFunction, Request, Response } from "express";
-import { ResponseUtil } from "../../../utils/response.utils";
-import { verifyJWT } from "../../../utils/jwt.utils";
+import {NextFunction, Request, Response} from "express";
+import {ResponseUtil} from "../../../utils/response.utils";
+import {verifyJWT} from "../../../utils/jwt.utils";
 
 export function admin_jwt_middleware(req: Request, res: Response, next: NextFunction) {
     const token = req.header('Authorization');
@@ -16,10 +16,7 @@ export function admin_jwt_middleware(req: Request, res: Response, next: NextFunc
         if (decoded.payload) {
             //@ts-ignore
             const { username, name, expiresIn, issuedAt, isAdmin } = decoded.payload;
-
-            const isAdminBool = isAdmin === 'true';
-
-            if (isAdminBool) {
+            if (isAdmin) {
                 //@ts-ignore
                 req.username = username;
                 //@ts-ignore
@@ -29,7 +26,7 @@ export function admin_jwt_middleware(req: Request, res: Response, next: NextFunc
                 //@ts-ignore
                 req.issuedAt = issuedAt;
                 //@ts-ignore
-                req.isAdmin = isAdminBool;
+                req.isAdmin = isAdmin;
                 next();
             } else {
                 return ResponseUtil.sendError(res, 403, "Forbidden", null);

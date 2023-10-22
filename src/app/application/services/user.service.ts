@@ -40,17 +40,15 @@ export class UserService implements UserService {
 
         return signJWT(jwtClaims, "3h");
     }
-
-    async register(username: string, name: string, email: string, password: string): Promise<boolean | null> {
+    async createUser(username: string, name: string, email: string, password: string, isAdmin: boolean): Promise<boolean> {
         const hashedPassword = await hashString(password);
-
         if (hashedPassword) {
             //@ts-ignore
             const newUser: User = {
                 username: username,
                 name: name,
                 email: email,
-                isAdmin: false,
+                isAdmin: isAdmin,
                 hashedPassword: hashedPassword,
             };
 
@@ -62,4 +60,57 @@ export class UserService implements UserService {
         }
     }
 
+    async deleteUser(id: number): Promise<boolean | null> {
+         const existingUser = await this.userRepository.findById(id);
+         if (!existingUser) {
+             return false;
+         }
+
+         await this.userRepository.delete(id);
+         return true;
+    }
+
+    async updateUser(id: number, updatedUser: Partial<User>): Promise<boolean> {
+        const existingUser = await this.userRepository.findById(id);
+        if (!existingUser) {
+            return false;
+        }
+
+        //@ts-ignore
+        if (updatedUser.password) {
+            //@ts-ignore
+            const hashedPassword = await hashString(updatedUser.password);
+            if (hashedPassword) {
+                //@ts-ignore
+                updatedUser.hashedPassword = hashedPassword;
+            }
+            //@ts-ignore
+            delete updatedUser.password;
+        }
+
+        updatedUser.id = id;
+        await this.userRepository.update(updatedUser);
+        return true;
+    }
+
+    async findUserByUsername(username: string): Promise<User | null>{
+        const existingUser = await this.userRepository.findByUsername(username);
+        if (!existingUser) {
+            return null;
+        }
+
+        return existingUser;
+    }
+
+    async findUserById(id: number): Promise<User | null> {
+        const existingUser = await this.userRepository.findById(id);
+        if (!existingUser) {
+            return null;
+        }
+        return existingUser;
+    }
+
+    async getAllUsers(): Promise<User[] | null> {
+        return this.userRepository.findAll();
+    }
 }

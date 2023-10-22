@@ -25,7 +25,7 @@ export class CategoryController {
                 return ResponseUtil.sendError(res, 500, 'Category creation failed', null);
             }
         } catch (error) {
-            return ResponseUtil.sendError(res, 500, 'Internal server error', error);
+            return ResponseUtil.sendError(res, 500, 'Unable to process data', error);
         }
     }
 
@@ -43,7 +43,7 @@ export class CategoryController {
                 return ResponseUtil.sendError(res, 404, 'Category not found or update failed', null);
             }
         } catch (error) {
-            return ResponseUtil.sendError(res, 500, 'Internal server error', error);
+            return ResponseUtil.sendError(res, 500, 'Unable to process data', error);
         }
     }
 
@@ -57,7 +57,7 @@ export class CategoryController {
                 return ResponseUtil.sendError(res, 404, 'Category not found or deletion failed', null);
             }
         } catch (error) {
-            return ResponseUtil.sendError(res, 500, 'Internal server error', error);
+            return ResponseUtil.sendError(res, 500, 'Unable to process data', error);
         }
     }
 
@@ -73,7 +73,7 @@ export class CategoryController {
                 return ResponseUtil.sendError(res, 404, 'Category not found', null);
             }
         } catch (error) {
-            return ResponseUtil.sendError(res, 500, 'Internal server error', error);
+            return ResponseUtil.sendError(res, 500, 'Unable to process data', error);
         }
     }
 
@@ -88,7 +88,7 @@ export class CategoryController {
                 return ResponseUtil.sendError(res, 404, 'Category not found', null);
             }
         } catch (error) {
-            return ResponseUtil.sendError(res, 500, 'Internal server error', error);
+            return ResponseUtil.sendError(res, 500, 'Unable to process data', error);
         }
     }
 
@@ -104,7 +104,7 @@ export class CategoryController {
                 return ResponseUtil.sendResponse(res, 404, 'No category found', null);
             }
         } catch (error) {
-            return ResponseUtil.sendError(res, 500, 'Internal server error', error);
+            return ResponseUtil.sendError(res, 500, 'Unable to process data', error);
         }
     }
 

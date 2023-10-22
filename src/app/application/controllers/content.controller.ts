@@ -31,7 +31,7 @@ export class ContentController {
                 return ResponseUtil.sendError(res, 500, 'Content creation failed', null);
             }
         } catch (error) {
-            return ResponseUtil.sendError(res, 500, 'Internal server error', error);
+            return ResponseUtil.sendError(res, 500, 'Unable to process data', error);
         }
     }
 
@@ -53,7 +53,7 @@ export class ContentController {
                 return ResponseUtil.sendError(res, 404, 'Content not found or update failed', null);
             }
         } catch (error) {
-            return ResponseUtil.sendError(res, 500, 'Internal server error', error);
+            return ResponseUtil.sendError(res, 500, 'Unable to process data', error);
         }
     }
 
@@ -67,7 +67,7 @@ export class ContentController {
                 return ResponseUtil.sendError(res, 404, 'Content not found or deletion failed', null);
             }
         } catch (error) {
-            return ResponseUtil.sendError(res, 500, 'Internal server error', error);
+            return ResponseUtil.sendError(res, 500, 'Unable to process data', error);
         }
     }
 
@@ -83,7 +83,7 @@ export class ContentController {
                 return ResponseUtil.sendError(res, 404, 'Content not found', null);
             }
         } catch (error) {
-            return ResponseUtil.sendError(res, 500, 'Internal server error', error);
+            return ResponseUtil.sendError(res, 500, 'Unable to process data', error);
         }
     }
 
@@ -97,7 +97,7 @@ export class ContentController {
                 return ResponseUtil.sendResponse(res, 404, 'No content found', null);
             }
         } catch (error) {
-            return ResponseUtil.sendError(res, 500, 'Internal server error', error);
+            return ResponseUtil.sendError(res, 500, 'Unable to process data', error);
         }
     }
 

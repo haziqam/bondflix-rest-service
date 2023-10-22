@@ -21,3 +21,6 @@ mv .env.example .env && mv docker.env.example docker.env
 ```sh
 docker-compose up -d --build
 ```
+
+## Redis Use Case
+![Redis Use Case](asset/Redis-Simple-UseCase.png)  

@@ -4,8 +4,13 @@ import {jwt_middleware} from "../middlewares/jwt_auth.middleware";
 
 export function userRoutes(controller: UserController): Router {
     const router = Router();
+    /**
+     * Get all user
+     */
     router.get('/', jwt_middleware, (req: Request, res: Response) => {
         controller.getUser(req, res).then(r => {});
     })
+
+    //TODO: CRUD basic user.
     return router;
 }

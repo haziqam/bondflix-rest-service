@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import {z} from 'zod';
 
 export const CreateContentSchema = z.object({
     title: z.string().min(1, 'Title must not be empty'),

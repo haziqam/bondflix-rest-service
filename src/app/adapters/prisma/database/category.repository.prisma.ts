@@ -1,5 +1,5 @@
-import { PrismaClient, Category } from '@prisma/client';
-import { CategoryRepository } from '../../../interfaces/repositories/category.repository';
+import {Category, PrismaClient} from '@prisma/client';
+import {CategoryRepository} from '../../../interfaces/repositories/category.repository';
 
 const prisma = new PrismaClient();
 

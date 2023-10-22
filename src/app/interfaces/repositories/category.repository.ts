@@ -1,4 +1,4 @@
-import { Category } from "@prisma/client";
+import {Category} from "@prisma/client";
 
 export interface CategoryRepository {
     findById(id: number): Promise<Category | null>;

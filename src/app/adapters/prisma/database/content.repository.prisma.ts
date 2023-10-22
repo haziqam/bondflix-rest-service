@@ -1,5 +1,5 @@
-import { PrismaClient, Content } from '@prisma/client';
-import { ContentRepository } from '../../../interfaces/repositories/content.repository';
+import {Content, PrismaClient} from '@prisma/client';
+import {ContentRepository} from '../../../interfaces/repositories/content.repository';
 
 const prisma = new PrismaClient();
 

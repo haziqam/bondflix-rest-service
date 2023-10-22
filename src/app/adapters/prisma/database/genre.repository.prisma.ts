@@ -1,5 +1,5 @@
-import { PrismaClient, Genre } from '@prisma/client';
-import { GenreRepository } from '../../../interfaces/repositories/genre.repository';
+import {Genre, PrismaClient} from '@prisma/client';
+import {GenreRepository} from '../../../interfaces/repositories/genre.repository';
 
 const prisma = new PrismaClient();
 
@@ -25,5 +25,9 @@ export class GenreRepositoryPrisma implements GenreRepository {
             where: { id: genre.id },
             data: genre,
         });
+    }
+
+    async findAll() {
+        return prisma.genre.findMany();
     }
 }

@@ -1,6 +1,6 @@
-import { Request, Response } from 'express';
-import { ContentService } from '../services/content.service';
-import { ResponseUtil } from '../../utils/response.utils';
+import {Request, Response} from 'express';
+import {ContentService} from '../services/content.service';
+import {ResponseUtil} from '../../utils/response.utils';
 import {CreateContentSchema} from "../../schema/content/create_content.schema";
 import {UpdateContentSchema} from "../../schema/content/update_content.schema";
 

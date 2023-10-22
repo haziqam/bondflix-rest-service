@@ -1,5 +1,5 @@
-import { Request, Response, Router } from 'express';
-import { ContentController } from '../../../application/controllers/content.controller';
+import {Request, Response, Router} from 'express';
+import {ContentController} from '../../../application/controllers/content.controller';
 
 export function contentRoutes(controller: ContentController): Router {
     const router = Router();

@@ -1,4 +1,4 @@
-import { Director } from "@prisma/client";
+import {Director} from "@prisma/client";
 
 export interface DirectorRepository {
     findById(id: number): Promise<Director | null>;

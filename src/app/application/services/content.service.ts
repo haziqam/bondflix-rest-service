@@ -1,5 +1,5 @@
-import { Content } from '@prisma/client';
-import { ContentRepository } from '../../interfaces/repositories/content.repository';
+import {Content} from '@prisma/client';
+import {ContentRepository} from '../../interfaces/repositories/content.repository';
 
 export class ContentService {
     private contentRepository: ContentRepository;

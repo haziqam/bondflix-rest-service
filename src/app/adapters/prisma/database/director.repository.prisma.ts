@@ -1,5 +1,5 @@
-import { PrismaClient, Director } from '@prisma/client';
-import { DirectorRepository } from '../../../interfaces/repositories/director.repository';
+import {Director, PrismaClient} from '@prisma/client';
+import {DirectorRepository} from '../../../interfaces/repositories/director.repository';
 
 const prisma = new PrismaClient();
 

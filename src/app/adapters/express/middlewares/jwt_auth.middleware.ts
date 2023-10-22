@@ -1,4 +1,4 @@
-import {Request, Response, NextFunction} from "express";
+import {NextFunction, Request, Response} from "express";
 import {ResponseUtil} from "../../../utils/response.utils";
 import {verifyJWT} from "../../../utils/jwt.utils";
 
@@ -24,7 +24,6 @@ export function jwt_middleware(req: Request, res: Response, next: NextFunction) 
             req.expiresIn = expiresIn;
             // @ts-ignore
             req.issuedAt = issuedAt;
-            console.log(decoded.payload)
             next();
         } else {
             return ResponseUtil.sendError(res, 401, "Unauthorized", null);

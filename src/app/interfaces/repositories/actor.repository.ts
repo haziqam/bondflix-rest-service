@@ -1,4 +1,4 @@
-import { Actor } from '@prisma/client';
+import {Actor} from '@prisma/client';
 
 export interface ActorRepository {
     create(actor: Actor): Promise<void>;

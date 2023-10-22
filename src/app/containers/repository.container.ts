@@ -1,9 +1,9 @@
-import { UserRepository } from '../interfaces/repositories/user.repository';
-import { ContentRepository } from '../interfaces/repositories/content.repository';
-import { CategoryRepository } from '../interfaces/repositories/category.repository';
-import { DirectorRepository } from '../interfaces/repositories/director.repository';
-import { GenreRepository } from '../interfaces/repositories/genre.repository';
-import { ActorRepository } from '../interfaces/repositories/actor.repository';
+import {UserRepository} from '../interfaces/repositories/user.repository';
+import {ContentRepository} from '../interfaces/repositories/content.repository';
+import {CategoryRepository} from '../interfaces/repositories/category.repository';
+import {DirectorRepository} from '../interfaces/repositories/director.repository';
+import {GenreRepository} from '../interfaces/repositories/genre.repository';
+import {ActorRepository} from '../interfaces/repositories/actor.repository';
 
 export class RepositoryContainer {
     private static instance: RepositoryContainer;

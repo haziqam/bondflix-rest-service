@@ -1,4 +1,4 @@
-import { Content } from "@prisma/client";
+import {Content} from "@prisma/client";
 
 export interface ContentRepository {
     findAll(): Promise<Content[] | null>;

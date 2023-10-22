@@ -25,7 +25,7 @@ export class GenreController {
                 return ResponseUtil.sendError(res, 500, 'Genre creation failed', null);
             }
         } catch (error) {
-            return ResponseUtil.sendError(res, 500, 'Unable to process data', error);
+            return ResponseUtil.sendError(res, 500, 'Unable to process data', null);
         }
     }
 
@@ -43,7 +43,7 @@ export class GenreController {
                 return ResponseUtil.sendError(res, 404, 'Genre not found or update failed', null);
             }
         } catch (error) {
-            return ResponseUtil.sendError(res, 500, 'Unable to process data', error);
+            return ResponseUtil.sendError(res, 500, 'Unable to process data', null);
         }
     }
 
@@ -57,7 +57,7 @@ export class GenreController {
                 return ResponseUtil.sendError(res, 404, 'Genre not found or deletion failed', null);
             }
         } catch (error) {
-            return ResponseUtil.sendError(res, 500, 'Unable to process data', error);
+            return ResponseUtil.sendError(res, 500, 'Unable to process data', null);
         }
     }
 
@@ -73,7 +73,7 @@ export class GenreController {
                 return ResponseUtil.sendError(res, 404, 'Genre not found', null);
             }
         } catch (error) {
-            return ResponseUtil.sendError(res, 500, 'Unable to process data', error);
+            return ResponseUtil.sendError(res, 500, 'Unable to process data', null);
         }
     }
 
@@ -88,7 +88,7 @@ export class GenreController {
                 return ResponseUtil.sendError(res, 404, 'Genre not found', null);
             }
         } catch (error) {
-            return ResponseUtil.sendError(res, 500, 'Unable to process data', error);
+            return ResponseUtil.sendError(res, 500, 'Unable to process data', null);
         }
     }
 
@@ -104,7 +104,7 @@ export class GenreController {
                 return ResponseUtil.sendResponse(res, 404, 'No genre found', null);
             }
         } catch (error) {
-            return ResponseUtil.sendError(res, 500, 'Unable to process data', error);
+            return ResponseUtil.sendError(res, 500, 'Unable to process data', null);
         }
     }
 

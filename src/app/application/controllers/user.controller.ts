@@ -112,7 +112,7 @@ export class UserController {
                 return ResponseUtil.sendError(res, 404, "Authentication failed", null);
             }
         } catch (error) {
-            return ResponseUtil.sendError(res, 500, "Unable to process data", error);
+            return ResponseUtil.sendError(res, 500, "Unable to process data", null);
         }
     }
 
@@ -126,7 +126,7 @@ export class UserController {
                 return ResponseUtil.sendError(res, 500, "Registration failed", null);
             }
         } catch (error) {
-            return ResponseUtil.sendError(res, 500, "Unable to process data", error);
+            return ResponseUtil.sendError(res, 500, "Unable to process data", null);
         }
     }
 }

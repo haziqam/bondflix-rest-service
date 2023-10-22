@@ -9,16 +9,21 @@ import {contentRoutes} from "./adapters/express/routes/content.route";
 import {GenreController} from "./application/controllers/genre.controller";
 import {genreRoutes} from "./adapters/express/routes/genre.route";
 import {ResponseUtil} from "./utils/response.utils";
+import {CategoryController} from "./application/controllers/category.controller";
+import {categoryRoutes} from "./adapters/express/routes/category.route";
 
 export function routes(app: Express, container: ServiceContainer){
     const userController = new UserController(container.getUserService());
     const contentController = new ContentController(container.getContentService());
     const genreController = new GenreController(container.getGenreService());
+    const categoryController = new CategoryController(container.getCategoryService());
+
     app.use('/api/v1/health', healthRoutes);
     app.use('/api/v1/users', userRoutes(userController));
     app.use('/api/v1/auth', authRoutes(userController));
     app.use('/api/v1/contents', contentRoutes(contentController));
     app.use('/api/v1/genres', genreRoutes(genreController));
+    app.use('/api/v1/categories', categoryRoutes(categoryController));
 
     /**
      * Handling errors and not found routes

@@ -38,24 +38,24 @@ model Content {
 
 model Genre {
   id      Int    @id @default(autoincrement())
-  name    String
+  name    String  @unique
   content Content[]
 }
 
 model Category {
   id      Int    @id @default(autoincrement())
-  name    String
+  name    String  @unique
   content Content[]
 }
 
 model Director {
   id      Int    @id @default(autoincrement())
-  name    String
+  name    String  @unique
   content Content[]
 }
 
 model Actor {
   id      Int    @id @default(autoincrement())
-  name    String
+  name    String  @unique
   content Content[]
 }

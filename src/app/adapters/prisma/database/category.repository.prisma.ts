@@ -26,4 +26,8 @@ export class CategoryRepositoryPrisma implements CategoryRepository {
             data: category,
         });
     }
+
+    async findAll() {
+        return prisma.category.findMany();
+    }
 }

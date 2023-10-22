@@ -2,7 +2,7 @@ import {NextFunction, Request, Response} from "express";
 import {ResponseUtil} from "../../../utils/response.utils";
 import {verifyJWT} from "../../../utils/jwt.utils";
 
-export function jwt_middleware(req: Request, res: Response, next: NextFunction) {
+export function user_jwt_middleware(req: Request, res: Response, next: NextFunction) {
     const token = req.header('Authorization');
 
     if (!token || !token.startsWith('Bearer ')) {
@@ -15,7 +15,7 @@ export function jwt_middleware(req: Request, res: Response, next: NextFunction) 
         const decoded = verifyJWT(tokenWithoutBearer);
         if (decoded.payload) {
             // @ts-ignore
-            const { username, name, expiresIn, issuedAt } = decoded.payload;
+            const { username, name, expiresIn, issuedAt, isAdmin } = decoded.payload;
             // @ts-ignore
             req.username = username;
             // @ts-ignore
@@ -24,6 +24,8 @@ export function jwt_middleware(req: Request, res: Response, next: NextFunction) 
             req.expiresIn = expiresIn;
             // @ts-ignore
             req.issuedAt = issuedAt;
+            // @ts-ignore
+            req.isAdmin = isAdmin;
             next();
         } else {
             return ResponseUtil.sendError(res, 401, "Unauthorized", null);

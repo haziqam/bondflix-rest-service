@@ -1,52 +1,52 @@
 import {Request, Response, Router} from "express";
-import {GenreController} from "../../../application/controllers/genre.controller";
 import {user_jwt_middleware} from "../middlewares/user_jwt_auth.middleware";
+import {CategoryController} from "../../../application/controllers/category.controller";
 import {admin_jwt_middleware} from "../middlewares/admin_jwt_auth.middleware";
 
-export function genreRoutes(controller: GenreController): Router {
+export function categoryRoutes(controller: CategoryController): Router {
     const router = Router();
 
     /**
-     * Find all genre route
+     * Find all category route
      */
     router.get('/', user_jwt_middleware, (req: Request, res: Response) => {
-        controller.getAllGenre(req, res).then(() => {});
+        controller.getAllCategory(req, res).then(() => {});
     })
 
     /**
-     * Find genre by id route
+     * Find category by id route
      */
     router.get('/:id', user_jwt_middleware, (req: Request, res: Response) => {
-        controller.getGenreById(req, res).then(() => {});
+        controller.getCategoryById(req, res).then(() => {});
     })
 
     /**
-     * Find genre by name
+     * Find category by name
      * Although better if I change this to use query instead of params.
      */
-    router.get('/:name', user_jwt_middleware, (req: Request, res: Response) => {
-        controller.getGenreByName(req, res).then(() => {});
+    router.get('/:name',  user_jwt_middleware, (req: Request, res: Response) => {
+        controller.getCategoryByName(req, res).then(() => {});
     })
 
     /**
-     * Create genre by id
+     * Create category
      */
     router.post('/', admin_jwt_middleware, (req: Request, res: Response) => {
-        controller.createGenre(req, res).then(() => {});
+        controller.createCategory(req, res).then(() => {});
     })
 
     /**
-     * Update genre by id
+     * Update category by id
      */
     router.put('/:id', admin_jwt_middleware, (req: Request, res: Response) => {
-        controller.updateGenre(req, res).then(() => {});
+        controller.updateCategory(req, res).then(() => {});
     })
 
     /**
-     * Delete genre by id
+     * Delete category by id
      */
     router.delete('/:id', admin_jwt_middleware, (req: Request, res: Response) => {
-        controller.deleteGenre(req, res).then(() => {});
+        controller.deleteCategory(req, res).then(() => {});
     })
 
 

@@ -4,3 +4,4 @@ docker.env
 .env
 src/.env
 *.key
+node_modules

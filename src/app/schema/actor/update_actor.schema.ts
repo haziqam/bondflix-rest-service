@@ -1,4 +1,4 @@
-import { z } from "zod";
+import {z} from "zod";
 
 export const updateActorSchema =z.object({
     first_name: z.string().min(1, "First name may not be empty").optional(),

@@ -4,6 +4,7 @@ import {ResponseUtil} from '../../utils/response.utils';
 import {CreateGenreSchema} from "../../schema/genre/create_genre.schema";
 import {UpdateGenreSchema} from "../../schema/genre/update_genre.schema";
 import {SearchGenreByNameSchema} from "../../schema/genre/search_genre_by_name.schema";
+import {handle_error} from "../../utils/handle_error.utils";
 
 export class GenreController {
     private genreService: GenreService;
@@ -25,7 +26,7 @@ export class GenreController {
                 return ResponseUtil.sendError(res, 500, 'Genre creation failed', null);
             }
         } catch (error) {
-            return ResponseUtil.sendError(res, 500, 'Unable to process data', null);
+            handle_error(res, error);
         }
     }
 
@@ -43,7 +44,7 @@ export class GenreController {
                 return ResponseUtil.sendError(res, 404, 'Genre not found or update failed', null);
             }
         } catch (error) {
-            return ResponseUtil.sendError(res, 500, 'Unable to process data', null);
+            handle_error(res, error);
         }
     }
 
@@ -57,7 +58,7 @@ export class GenreController {
                 return ResponseUtil.sendError(res, 404, 'Genre not found or deletion failed', null);
             }
         } catch (error) {
-            return ResponseUtil.sendError(res, 500, 'Unable to process data', null);
+            handle_error(res, error);
         }
     }
 
@@ -73,7 +74,7 @@ export class GenreController {
                 return ResponseUtil.sendError(res, 404, 'Genre not found', null);
             }
         } catch (error) {
-            return ResponseUtil.sendError(res, 500, 'Unable to process data', null);
+            handle_error(res, error);
         }
     }
 
@@ -88,7 +89,7 @@ export class GenreController {
                 return ResponseUtil.sendError(res, 404, 'Genre not found', null);
             }
         } catch (error) {
-            return ResponseUtil.sendError(res, 500, 'Unable to process data', null);
+            handle_error(res, error);
         }
     }
 
@@ -104,7 +105,7 @@ export class GenreController {
                 return ResponseUtil.sendResponse(res, 404, 'No genre found', null);
             }
         } catch (error) {
-            return ResponseUtil.sendError(res, 500, 'Unable to process data', null);
+            handle_error(res, error);
         }
     }
 

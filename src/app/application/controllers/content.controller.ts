@@ -4,6 +4,7 @@ import {ResponseUtil} from '../../utils/response.utils';
 import {CreateContentSchema} from "../../schema/content/create_content.schema";
 import {UpdateContentSchema} from "../../schema/content/update_content.schema";
 import {UserService} from "../services/user.service";
+import {handle_error} from "../../utils/handle_error.utils";
 
 export class ContentController {
     private contentService: ContentService;
@@ -13,7 +14,6 @@ export class ContentController {
         this.contentService = contentService;
         this.userService = userService;
     }
-    //TODO: Make error handler for zod and etc
     async createContent(req: Request, res: Response) {
         try {
             const { title, creator_id, description, content_file_path, thumbnail_file_path } = CreateContentSchema.parse(req.body);
@@ -40,7 +40,7 @@ export class ContentController {
                 return ResponseUtil.sendError(res, 500, 'Content creation failed', null);
             }
         } catch (error) {
-            return ResponseUtil.sendError(res, 500, 'Unable to process data', null);
+            handle_error(res, error);
         }
     }
 
@@ -68,7 +68,7 @@ export class ContentController {
                 return ResponseUtil.sendError(res, 404, 'Content not found or update failed', null);
             }
         } catch (error) {
-            return ResponseUtil.sendError(res, 500, 'Unable to process data', null);
+            handle_error(res, error);
         }
     }
 
@@ -82,7 +82,7 @@ export class ContentController {
                 return ResponseUtil.sendError(res, 404, 'Content not found or deletion failed', null);
             }
         } catch (error) {
-            return ResponseUtil.sendError(res, 500, 'Unable to process data', null);
+            handle_error(res, error);
         }
     }
 
@@ -98,7 +98,7 @@ export class ContentController {
                 return ResponseUtil.sendError(res, 404, 'Content not found', null);
             }
         } catch (error) {
-            return ResponseUtil.sendError(res, 500, 'Unable to process data', null);
+            handle_error(res, error);
         }
     }
 
@@ -112,7 +112,7 @@ export class ContentController {
                 return ResponseUtil.sendResponse(res, 404, 'No content found', null);
             }
         } catch (error) {
-            return ResponseUtil.sendError(res, 500, 'Unable to process data', null);
+            handle_error(res, error);
         }
     }
 

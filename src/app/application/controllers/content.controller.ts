@@ -13,7 +13,7 @@ export class ContentController {
         this.contentService = contentService;
         this.userService = userService;
     }
-
+    //TODO: Make error handler for zod and etc
     async createContent(req: Request, res: Response) {
         try {
             const { title, creator_id, description, content_file_path, thumbnail_file_path } = CreateContentSchema.parse(req.body);

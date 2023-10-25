@@ -10,6 +10,7 @@ export class ContentService {
 
     async createContent(
         title: string,
+        creator_id: number,
         description: string,
         releaseDate: Date,
         contentFilePath: string,
@@ -17,8 +18,9 @@ export class ContentService {
     ): Promise<Content | null> {
         //@ts-ignore
         const newContent: Content = {
-            title,
-            description,
+            title: title,
+            creator_id: creator_id,
+            description: description,
             release_date: releaseDate,
             content_file_path: contentFilePath,
             thumbnail_file_path: thumbnailFilePath,

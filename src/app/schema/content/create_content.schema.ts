@@ -2,6 +2,7 @@ import {z} from 'zod';
 
 export const CreateContentSchema = z.object({
     title: z.string().min(1, 'Title must not be empty'),
+    creator_id: z.number(),
     description: z.string(),
     release_date: z.string().refine((dateString) => {
         return /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/.test(dateString);

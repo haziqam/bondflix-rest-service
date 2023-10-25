@@ -3,22 +3,31 @@ import {ContentService} from '../services/content.service';
 import {ResponseUtil} from '../../utils/response.utils';
 import {CreateContentSchema} from "../../schema/content/create_content.schema";
 import {UpdateContentSchema} from "../../schema/content/update_content.schema";
+import {UserService} from "../services/user.service";
 
 export class ContentController {
     private contentService: ContentService;
+    private userService: UserService;
 
-    constructor(contentService: ContentService) {
+    constructor(contentService: ContentService, userService: UserService) {
         this.contentService = contentService;
+        this.userService = userService;
     }
 
     async createContent(req: Request, res: Response) {
         try {
-            const { title, description, content_file_path, thumbnail_file_path } = CreateContentSchema.parse(req.body);
+            const { title, creator_id, description, content_file_path, thumbnail_file_path } = CreateContentSchema.parse(req.body);
 
             const release_date = new Date(req.body.release_date);
 
+            const creator = await this.userService.findUserById(creator_id);
+            if (!creator) {
+                return ResponseUtil.sendError(res, 404, "Creator not found", null);
+            }
+
             const createdContent = await this.contentService.createContent(
                 title,
+                creator_id,
                 description,
                 release_date,
                 content_file_path,
@@ -44,6 +53,12 @@ export class ContentController {
                 // @ts-ignore
                 updatedContent.release_date = new Date(updatedContent.release_date);
             }
+
+            const creator = await this.userService.findUserById(updatedContent.creator_id);
+            if (!creator) {
+                return ResponseUtil.sendError(res, 404, "Creator not found", null);
+            }
+
             //@ts-ignore
             const success = await this.contentService.updateContent(contentId, updatedContent);
 

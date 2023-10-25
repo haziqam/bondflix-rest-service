@@ -12,7 +12,7 @@ import {signJWT} from "../../utils/jwt.utils";
  * 4. Don't Access HTTP Request/Response
  * 5. Validate / Sanitize Input using Zod
  */
-export class UserService implements UserService {
+export class UserService {
     private userRepository: UserRepository;
 
     constructor(userRepository: UserRepository) {

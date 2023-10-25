@@ -26,4 +26,8 @@ export class ActorRepositoryPrisma implements ActorRepository {
     async findByName(name: string) {
         return prisma.actor.findFirst({ where: { name } });
     }
+
+    async findAll() {
+        return prisma.actor.findMany();
+    }
 }

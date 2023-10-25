@@ -5,6 +5,7 @@ import {LoginSchema} from "../../schema/auth/login.schema";
 import {RegisterSchema} from "../../schema/auth/register.schema";
 import {CreateUserSchema} from "../../schema/user/create_user.schema";
 import {UpdateUserSchema} from "../../schema/user/update_user.schema";
+import {handle_error} from "../../utils/handle_error.utils";
 
 /**
  * What to do in Controllers:
@@ -40,7 +41,7 @@ export class UserController {
                 }
             }
         } catch (error) {
-            return ResponseUtil.sendError(res, 500, "Unable to process data", null);
+            handle_error(res, error);
         }
     }
 
@@ -54,7 +55,7 @@ export class UserController {
                 return ResponseUtil.sendError(res, 404, "User not found", null);
             }
         } catch (error) {
-            return ResponseUtil.sendError(res, 500, "Unable to process data", null);
+            handle_error(res, error);
         }
     }
 
@@ -69,7 +70,7 @@ export class UserController {
                 return ResponseUtil.sendError(res, 404, "User not found", null);
             }
         } catch (error) {
-            return ResponseUtil.sendError(res, 500, "Unable to process data", null);
+            handle_error(res, error);
         }
     }
 
@@ -83,7 +84,7 @@ export class UserController {
                 return ResponseUtil.sendError(res, 404, "User not found", null);
             }
         } catch (error) {
-            return ResponseUtil.sendError(res, 500, "Unable to process data", null);
+            handle_error(res, error);
         }
     }
     async getUserById(req: Request, res: Response) {
@@ -96,7 +97,7 @@ export class UserController {
                 return ResponseUtil.sendError(res, 404, "User not found", null);
             }
         } catch (error) {
-            return ResponseUtil.sendError(res, 500, "Unable to process data", null);
+            handle_error(res, error);
         }
     }
 
@@ -112,7 +113,7 @@ export class UserController {
                 return ResponseUtil.sendError(res, 404, "Authentication failed", null);
             }
         } catch (error) {
-            return ResponseUtil.sendError(res, 500, "Unable to process data", null);
+            handle_error(res, error);
         }
     }
 
@@ -126,7 +127,7 @@ export class UserController {
                 return ResponseUtil.sendError(res, 500, "Registration failed", null);
             }
         } catch (error) {
-            return ResponseUtil.sendError(res, 500, "Unable to process data", null);
+            handle_error(res, error);
         }
     }
 }

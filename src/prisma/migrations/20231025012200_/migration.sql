@@ -13,6 +13,7 @@ CREATE TABLE "User" (
 -- CreateTable
 CREATE TABLE "Content" (
     "id" SERIAL NOT NULL,
+    "creator_id" INTEGER NOT NULL,
     "title" TEXT NOT NULL,
     "description" TEXT NOT NULL,
     "release_date" TIMESTAMP(3) NOT NULL,
@@ -120,6 +121,9 @@ CREATE UNIQUE INDEX "_ActorToContent_AB_unique" ON "_ActorToContent"("A", "B");
 
 -- CreateIndex
 CREATE INDEX "_ActorToContent_B_index" ON "_ActorToContent"("B");
+
+-- AddForeignKey
+ALTER TABLE "Content" ADD CONSTRAINT "Content_creator_id_fkey" FOREIGN KEY ("creator_id") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_ContentToGenre" ADD CONSTRAINT "_ContentToGenre_A_fkey" FOREIGN KEY ("A") REFERENCES "Content"("id") ON DELETE CASCADE ON UPDATE CASCADE;

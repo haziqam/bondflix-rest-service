@@ -14,7 +14,7 @@ import {categoryRoutes} from "./adapters/express/routes/category.route";
 
 export function routes(app: Express, container: ServiceContainer){
     const userController = new UserController(container.getUserService());
-    const contentController = new ContentController(container.getContentService());
+    const contentController = new ContentController(container.getContentService(), container.getUserService());
     const genreController = new GenreController(container.getGenreService());
     const categoryController = new CategoryController(container.getCategoryService());
 

@@ -4,6 +4,7 @@ import {ResponseUtil} from '../../utils/response.utils';
 import {CreateCategorySchema} from "../../schema/category/create_category.schema";
 import {UpdateCategorySchema} from "../../schema/category/update_category.schema";
 import {SearchCategoryByNameSchema} from "../../schema/category/search_category_by_name.schema";
+import {handle_error} from "../../utils/handle_error.utils";
 
 export class CategoryController {
     private categoryService: CategoryService;
@@ -16,8 +17,7 @@ export class CategoryController {
         try {
             const { name } = CreateCategorySchema.parse(req.body);
 
-            const createdCategory = await this.categoryService.createCategory(name
-            );
+            const createdCategory = await this.categoryService.createCategory(name);
 
             if (createdCategory) {
                 return ResponseUtil.sendResponse(res, 201, 'Category created successfully', createdCategory);
@@ -25,7 +25,7 @@ export class CategoryController {
                 return ResponseUtil.sendError(res, 500, 'Category creation failed', null);
             }
         } catch (error) {
-            return ResponseUtil.sendError(res, 500, 'Unable to process data', null);
+            handle_error(res, error);
         }
     }
 
@@ -43,7 +43,7 @@ export class CategoryController {
                 return ResponseUtil.sendError(res, 404, 'Category not found or update failed', null);
             }
         } catch (error) {
-            return ResponseUtil.sendError(res, 500, 'Unable to process data', null);
+            handle_error(res, error);
         }
     }
 
@@ -57,7 +57,7 @@ export class CategoryController {
                 return ResponseUtil.sendError(res, 404, 'Category not found or deletion failed', null);
             }
         } catch (error) {
-            return ResponseUtil.sendError(res, 500, 'Unable to process data', null);
+            handle_error(res, error);
         }
     }
 
@@ -73,7 +73,7 @@ export class CategoryController {
                 return ResponseUtil.sendError(res, 404, 'Category not found', null);
             }
         } catch (error) {
-            return ResponseUtil.sendError(res, 500, 'Unable to process data', null);
+            handle_error(res, error);
         }
     }
 
@@ -88,7 +88,7 @@ export class CategoryController {
                 return ResponseUtil.sendError(res, 404, 'Category not found', null);
             }
         } catch (error) {
-            return ResponseUtil.sendError(res, 500, 'Unable to process data', null);
+            handle_error(res, error);
         }
     }
 
@@ -104,7 +104,7 @@ export class CategoryController {
                 return ResponseUtil.sendResponse(res, 404, 'No category found', null);
             }
         } catch (error) {
-            return ResponseUtil.sendError(res, 500, 'Unable to process data', null);
+            handle_error(res, error);
         }
     }
 

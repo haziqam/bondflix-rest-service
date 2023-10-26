@@ -79,7 +79,7 @@ export class ActorController {
 
     async getActorByName(req: Request, res: Response) {
         try {
-            const data = SearchActorByNameSchema.parse(req.params.name);
+            const data = SearchActorByNameSchema.parse(req.query);
             const actor = await this.actorService.findActorByName(data.name);
 
             if (actor) {

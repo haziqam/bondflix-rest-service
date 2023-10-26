@@ -10,7 +10,13 @@ export function actorRoutes(controller: ActorController): Router {
      * Find all actor route
      */
     router.get('/', user_jwt_middleware, (req: Request, res: Response) => {
-        controller.getAllActor(req, res).then(() => {});
+        if (req.query.name) {
+            console.log(req.query.name)
+            controller.getActorByName(req, res).then(() => {});
+        }
+        else {
+            controller.getAllActor(req, res).then(() => {});
+        }
     })
 
     /**
@@ -18,14 +24,6 @@ export function actorRoutes(controller: ActorController): Router {
      */
     router.get('/:id', user_jwt_middleware, (req: Request, res: Response) => {
         controller.getActorById(req, res).then(() => {});
-    })
-
-    /**
-     * Find actor by name
-     * Although better if I change this to use query instead of params.
-     */
-    router.get('/:name',  user_jwt_middleware, (req: Request, res: Response) => {
-        controller.getActorByName(req, res).then(() => {});
     })
 
     /**

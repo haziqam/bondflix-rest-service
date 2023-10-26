@@ -39,7 +39,5 @@ export function userRoutes(controller: UserController): Router {
         controller.deleteUser(req, res).then(() => {});
     });
 
-
-
     return router;
 }

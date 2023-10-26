@@ -5,14 +5,16 @@ import healthRoutes from "./adapters/express/routes/health.route";
 import {UserController} from "./application/controllers/user.controller";
 import {ServiceContainer} from "./containers/service.container";
 import {ContentController} from "./application/controllers/content.controller";
-import { ActorController } from "./application/controllers/actor.controller";
+import {ActorController} from "./application/controllers/actor.controller";
 import {contentRoutes} from "./adapters/express/routes/content.route";
 import {GenreController} from "./application/controllers/genre.controller";
 import {genreRoutes} from "./adapters/express/routes/genre.route";
 import {ResponseUtil} from "./utils/response.utils";
 import {CategoryController} from "./application/controllers/category.controller";
 import {categoryRoutes} from "./adapters/express/routes/category.route";
-import { actorRoutes } from "./adapters/express/routes/actor.route";
+import {actorRoutes} from "./adapters/express/routes/actor.route";
+import {SubscriptionController} from "./application/controllers/subscription.controller";
+import {subscriptionRoutes} from "./adapters/express/routes/subscription.route";
 
 export function routes(app: Express, container: ServiceContainer){
     const userController = new UserController(container.getUserService());
@@ -20,6 +22,7 @@ export function routes(app: Express, container: ServiceContainer){
     const genreController = new GenreController(container.getGenreService());
     const categoryController = new CategoryController(container.getCategoryService());
     const actorController = new ActorController(container.getActorService());
+    const subscriptionController = new SubscriptionController(container.getSubscriptionService());
 
     app.use('/api/v1/health', healthRoutes);
     app.use('/api/v1/users', userRoutes(userController));
@@ -28,6 +31,7 @@ export function routes(app: Express, container: ServiceContainer){
     app.use('/api/v1/genres', genreRoutes(genreController));
     app.use('/api/v1/categories', categoryRoutes(categoryController));
     app.use('/api/v1/actors', actorRoutes(actorController));
+    app.use('/api/v1/subscriptions', subscriptionRoutes(subscriptionController));
 
     /**
      * Handling errors and not found routes

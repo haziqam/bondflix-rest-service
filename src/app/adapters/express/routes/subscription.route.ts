@@ -3,7 +3,6 @@ import {Request, Response, Router} from "express";
 import {SubscriptionController} from "../../../application/controllers/subscription.controller";
 
 
-
 export function subscriptionRoutes(controller: SubscriptionController): Router {
     const router = Router();
 

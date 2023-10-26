@@ -7,6 +7,7 @@ import {DirectorRepositoryPrisma} from "./adapters/prisma/database/director.repo
 import {GenreRepositoryPrisma} from "./adapters/prisma/database/genre.repository.prisma";
 import {ActorRepositoryPrisma} from "./adapters/prisma/database/actor.repository.prisma";
 import {CategoryRepositoryPrisma} from "./adapters/prisma/database/category.repository.prisma";
+import {SoapClient} from "./adapters/soap/soap.client";
 
 
 export function initContainer() : ServiceContainer {
@@ -20,9 +21,12 @@ export function initContainer() : ServiceContainer {
      * Initialize Redis Client
      */
 
+
     /**
-     * Initialize SOAP Client
+     * Initialize SOAP Service
      */
+    // @ts-ignore
+    SoapClient.getInstance(process.env.SOAP_SERVICE_URL);
 
     /**
      * Initialize Repositories

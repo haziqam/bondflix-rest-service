@@ -20,7 +20,7 @@ export class SoapUtils {
             const val = this.unmarshall(response.data, method);
             return this.flatten(val);
         } catch (error: any) {
-            console.log("Error marshalling the XML response");
+            console.log("Error unmarshalling the XML response");
         }
     }
 

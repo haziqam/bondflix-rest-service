@@ -9,7 +9,12 @@ healthRoutes.get('/', (req, res) => {
 });
 
 healthRoutes.post('/', async (req, res) => {
-    const hasil = await SoapClient.getInstance().getAdd(1,2);
+    const hasil = await SoapClient.getInstance().addCreatorSubscriberRelationship(1, 123)
+    if (hasil){
+        console.log("yey")
+    } else {
+        console.log("no")
+    }
     return ResponseUtil.sendResponse(res, 200, "Berhasil", hasil);
 
 } )

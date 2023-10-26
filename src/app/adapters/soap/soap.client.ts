@@ -1,4 +1,5 @@
 import {SoapUtils} from "../../utils/soap.utils";
+
 export class SoapClient {
     private static instance: SoapClient;
     private soapUtils: SoapUtils;
@@ -26,5 +27,14 @@ export class SoapClient {
             arg2: b
         };
         return await this.soapUtils.call("add", args);
+    }
+
+    public async addCreatorSubscriberRelationship(creatorId: number, subscriberId: number) {
+        const args= {
+            creatorId: creatorId,
+            subscriberId: subscriberId
+        }
+
+        return await this.soapUtils.call("addCreatorSubscriberRelationship", args)
     }
 }

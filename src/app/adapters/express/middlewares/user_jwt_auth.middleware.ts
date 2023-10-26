@@ -15,7 +15,9 @@ export function user_jwt_middleware(req: Request, res: Response, next: NextFunct
         const decoded = verifyJWT(tokenWithoutBearer);
         if (decoded.payload) {
             // @ts-ignore
-            const { username, name, expiresIn, issuedAt, isAdmin } = decoded.payload;
+            const { userId, username, name, expiresIn, issuedAt, isAdmin } = decoded.payload;
+            // @ts-ignore
+            req.userId = userId;
             // @ts-ignore
             req.username = username;
             // @ts-ignore

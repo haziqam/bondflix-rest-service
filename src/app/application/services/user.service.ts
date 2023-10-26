@@ -3,7 +3,6 @@ import {UserRepository} from "../../interfaces/repositories/user.repository";
 import {compareHashedString, hashString} from "../../utils/hash_string.utils";
 import {signJWT} from "../../utils/jwt.utils";
 
-
 /**
  * What to do in Services:
  * 1. Implement Business Logic

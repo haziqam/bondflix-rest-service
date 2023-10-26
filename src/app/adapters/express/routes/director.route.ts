@@ -1,49 +1,49 @@
 import {Request, Response, Router} from "express";
 import {user_jwt_middleware} from "../middlewares/user_jwt_auth.middleware";
-import {ActorController} from "../../../application/controllers/actor.controller";
+import {DirectorController} from "../../../application/controllers/director.controller";
 import {admin_jwt_middleware} from "../middlewares/admin_jwt_auth.middleware";
 
-export function actorRoutes(controller: ActorController): Router {
+export function directorRoutes(controller: DirectorController): Router {
     const router = Router();
 
     /**
-     * Find all actor route
+     * Find all director route
      */
     router.get('/', user_jwt_middleware, (req: Request, res: Response) => {
         if (req.query.name) {
-            controller.getActorByName(req, res).then(() => {});
+            controller.getDirectorByName(req, res).then(() => {});
         }
         else {
-            controller.getAllActor(req, res).then(() => {});
+            controller.getAllDirector(req, res).then(() => {});
         }
     })
 
     /**
-     * Find actor by id route
+     * Find director by id route
      */
     router.get('/:id', user_jwt_middleware, (req: Request, res: Response) => {
-        controller.getActorById(req, res).then(() => {});
+        controller.getDirectorById(req, res).then(() => {});
     })
 
     /**
-     * Create actor
+     * Create director
      */
     router.post('/', admin_jwt_middleware, (req: Request, res: Response) => {
-        controller.createActor(req, res).then(() => {});
+        controller.createDirector(req, res).then(() => {});
     })
 
     /**
-     * Update actor by id
+     * Update director by id
      */
     router.put('/:id', admin_jwt_middleware, (req: Request, res: Response) => {
-        controller.updateActor(req, res).then(() => {});
+        controller.updateDirector(req, res).then(() => {});
     })
 
     /**
-     * Delete actor by id
+     * Delete director by id
      */
     router.delete('/:id', admin_jwt_middleware, (req: Request, res: Response) => {
-        controller.deleteActor(req, res).then(() => {});
+        controller.deleteDirector(req, res).then(() => {});
     })
 
 

@@ -5,6 +5,7 @@ import {GenreService} from "../application/services/genre.service";
 import {CategoryService} from "../application/services/category.service";
 import {ActorService} from '../application/services/actor.service';
 import {SubscriptionService} from "../application/services/subscription.service";
+import {DirectorService} from '../application/services/director.service';
 
 export class ServiceContainer {
     private static instance: ServiceContainer;
@@ -14,7 +15,7 @@ export class ServiceContainer {
     private categoryService: CategoryService;
     private actorService: ActorService;
     private subscriptionService: SubscriptionService;
-    // private directorService: DirectorService;
+    private directorService: DirectorService;
 
     private constructor(repositoryContainer: RepositoryContainer) {
         this.userService = new UserService(repositoryContainer.getUserRepository());
@@ -23,7 +24,7 @@ export class ServiceContainer {
         this.categoryService = new CategoryService(repositoryContainer.getCategoryRepository());
         this.actorService = new ActorService(repositoryContainer.getActorRepository());
         this.subscriptionService = new SubscriptionService(repositoryContainer.getUserRepository());
-        // this.directorService = new DirectorService(repositoryContainer.getDirectorRepository());
+        this.directorService = new DirectorService(repositoryContainer.getDirectorRepository());
     }
 
     public static getInstance(repositoryContainer: RepositoryContainer): ServiceContainer {
@@ -57,7 +58,7 @@ export class ServiceContainer {
         return this.subscriptionService;
     }
 
-    // public getDirectorService(): DirectorService {
-    //     return this.directorService;
-    // }
+    public getDirectorService(): DirectorService {
+        return this.directorService;
+    }
 }

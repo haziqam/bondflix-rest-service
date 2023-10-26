@@ -20,6 +20,10 @@ export class DirectorRepositoryPrisma implements DirectorRepository {
         return prisma.director.findUnique({ where: { id } });
     }
 
+    async findAll() {
+        return prisma.director.findMany();
+    }
+
     async update(director: Director) {
         await prisma.director.update({
             where: { id: director.id },

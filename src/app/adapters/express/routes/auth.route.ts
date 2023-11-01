@@ -12,5 +12,8 @@ export function authRoutes(controller: UserController): Router {
     router.get("/logout", (req: Request, res: Response) => {
         controller.logout(req, res).then((r) => {});
     });
+    router.get("/autologin", (req: Request, res: Response) => {
+        controller.autoLogin(req, res).then((r) => {});
+    });
     return router;
 }

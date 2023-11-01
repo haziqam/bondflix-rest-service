@@ -6,6 +6,7 @@ import { RegisterSchema } from "../../schema/auth/register.schema";
 import { CreateUserSchema } from "../../schema/user/create_user.schema";
 import { UpdateUserSchema } from "../../schema/user/update_user.schema";
 import { handle_error } from "../../utils/handle_error.utils";
+import { verifyJWT } from "../../utils/jwt.utils";
 
 const JWT_COOKIE_MAX_AGE = 1800000;
 
@@ -224,6 +225,45 @@ export class UserController {
                 "Logout successful",
                 null
             );
+        } catch (error) {
+            handle_error(res, error);
+        }
+    }
+
+    async autoLogin(req: Request, res: Response) {
+        try {
+            const token = req.cookies["bondflix-auth-jwt"];
+
+            if (!token) {
+                return ResponseUtil.sendError(res, 404, "No token", null);
+            }
+
+            const decoded = verifyJWT(token);
+
+            //TODO: extract to a function
+            if (decoded.payload) {
+                // @ts-ignore
+                const { userId, username, name, expiresIn, issuedAt, isAdmin } =
+                    decoded.payload;
+                // @ts-ignore
+                req.userId = userId;
+                // @ts-ignore
+                req.username = username;
+                // @ts-ignore
+                req.name = name;
+                // @ts-ignore
+                req.expiresIn = expiresIn;
+                // @ts-ignore
+                req.issuedAt = issuedAt;
+                // @ts-ignore
+                req.isAdmin = isAdmin;
+                return ResponseUtil.sendResponse(
+                    res,
+                    200,
+                    "Login successful",
+                    null
+                );
+            }
         } catch (error) {
             handle_error(res, error);
         }

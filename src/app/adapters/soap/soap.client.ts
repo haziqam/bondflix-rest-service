@@ -60,9 +60,10 @@ export class SoapClient {
 
     public async updateSubscriptionByCreatorId(
         creatorId: number,
+        subscriberId: number,
         subscriptionStatus: boolean
     ) {
-        const args = { creatorId, subscriptionStatus };
+        const args = { creatorId, subscriberId, subscriptionStatus };
         return await this.soapUtils.call("updateSubscriptionByCreatorId", args);
     }
 

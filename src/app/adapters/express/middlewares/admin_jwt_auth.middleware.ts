@@ -1,21 +1,24 @@
-import {NextFunction, Request, Response} from "express";
-import {ResponseUtil} from "../../../utils/response.utils";
-import {verifyJWT} from "../../../utils/jwt.utils";
+import { NextFunction, Request, Response } from "express";
+import { ResponseUtil } from "../../../utils/response.utils";
+import { verifyJWT } from "../../../utils/jwt.utils";
 
-export function admin_jwt_middleware(req: Request, res: Response, next: NextFunction) {
-    const token = req.header('Authorization');
+export function admin_jwt_middleware(
+    req: Request,
+    res: Response,
+    next: NextFunction
+) {
+    const token = req.cookies["bondflix-auth-jwt"];
 
-    if (!token || !token.startsWith('Bearer ')) {
+    if (!token) {
         return ResponseUtil.sendError(res, 401, "Unauthorized", null);
     }
 
-    const tokenWithoutBearer = token.substring(7);
-
     try {
-        const decoded = verifyJWT(tokenWithoutBearer);
+        const decoded = verifyJWT(token);
         if (decoded.payload) {
             //@ts-ignore
-            const { username, name, expiresIn, issuedAt, isAdmin } = decoded.payload;
+            const { username, name, expiresIn, issuedAt, isAdmin } =
+                decoded.payload;
             if (isAdmin) {
                 //@ts-ignore
                 req.username = username;

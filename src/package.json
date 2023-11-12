@@ -3,10 +3,14 @@
   "version": "1.0.0",
   "description": "",
   "main": "./app/index.ts",
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
   "scripts": {
     "build": "tsc",
-    "start": "nodemon -L",
-    "migrate": "npx prisma migrate dev"
+    "start": "yarn migrate && yarn seed && nodemon -L",
+    "migrate": "npx prisma migrate dev",
+    "seed": "npx prisma db seed"
   },
   "keywords": [],
   "author": "",

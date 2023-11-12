@@ -16,6 +16,7 @@ datasource db {
 model User {
   id             Int    @id @default(autoincrement())
   username       String @unique
+  pp_url         String  @default("default.png")
   name           String
   email          String @unique
   isAdmin        Boolean

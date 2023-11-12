@@ -5,6 +5,7 @@ CREATE TYPE "SponsorStatus" AS ENUM ('INDIVIDUAL', 'ORGANIZATION', 'COMPANY', 'G
 CREATE TABLE "User" (
     "id" SERIAL NOT NULL,
     "username" TEXT NOT NULL,
+    "pp_url" TEXT NOT NULL DEFAULT 'default.png',
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "isAdmin" BOOLEAN NOT NULL,

@@ -1,5 +1,5 @@
-import {UserRepository} from "../../interfaces/repositories/user.repository";
-import {SoapClient} from "../../adapters/soap/soap.client";
+import { UserRepository } from "../../interfaces/repositories/user.repository";
+import { SoapClient } from "../../adapters/soap/soap.client";
 
 export class SubscriptionService {
     private userRepository: UserRepository;
@@ -7,15 +7,36 @@ export class SubscriptionService {
         this.userRepository = userRepository;
     }
 
-    async subscribe(userId: number, creatorId: number): Promise<Boolean> {
+    async subscribe(userId: number, creatorId: number): Promise<boolean> {
         const existingUser = await this.userRepository.findById(userId);
         if (!existingUser) {
             return false;
         }
         const existingCreator = await this.userRepository.findById(creatorId);
-        if (!existingCreator){
+        if (!existingCreator) {
             return false;
         }
-        return await SoapClient.getInstance().addCreatorSubscriberRelationship(existingCreator.id, existingUser.id);
+        return await SoapClient.getInstance().addCreatorSubscriberRelationship(
+            existingCreator.id,
+            existingUser.id
+        );
+    }
+
+    async isUserSubscribedToCreator(
+        userId: number,
+        creatorId: number
+    ): Promise<boolean> {
+        const existingUser = await this.userRepository.findById(userId);
+        if (!existingUser) {
+            return false;
+        }
+        const existingCreator = await this.userRepository.findById(creatorId);
+        if (!existingCreator) {
+            return false;
+        }
+        return await SoapClient.getInstance().isUserSubscribedToCreator(
+            userId,
+            creatorId
+        );
     }
 }

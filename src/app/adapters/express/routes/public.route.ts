@@ -11,5 +11,9 @@ export function publicRoutes(controller: PublicController): Router {
         controller.uploadFile(req, res)
     })
 
+    router.delete("/upload/delete", (req: Request, res: Response) => {
+        controller.deleteFile(req, res).then(() => {})
+    })
+
     return router;
 }

@@ -3,11 +3,11 @@ import {RepositoryContainer} from './containers/repository.container';
 import {ServiceContainer} from "./containers/service.container";
 import {UserRepositoryPrisma} from "./adapters/prisma/database/user.repository.prisma";
 import {ContentRepositoryPrisma} from "./adapters/prisma/database/content.repository.prisma";
-import {DirectorRepositoryPrisma} from "./adapters/prisma/database/director.repository.prisma";
 import {GenreRepositoryPrisma} from "./adapters/prisma/database/genre.repository.prisma";
-import {ActorRepositoryPrisma} from "./adapters/prisma/database/actor.repository.prisma";
+import {SponsorRepositoryPrisma} from "./adapters/prisma/database/sponsor.repository.prisma";
 import {CategoryRepositoryPrisma} from "./adapters/prisma/database/category.repository.prisma";
 import {SoapClient} from "./adapters/soap/soap.client";
+import {RedisClient} from "./adapters/redis/redis.client";
 
 
 export function initContainer() : ServiceContainer {
@@ -20,7 +20,10 @@ export function initContainer() : ServiceContainer {
     /**
      * Initialize Redis Client
      */
-
+    RedisClient.getInstance();
+    // const redisClient = RedisClient.getInstance();
+    //     redisClient.set('testKey', 'testValueasdasdas').then(() => {});
+    //     redisClient.get('testKey').then(value => console.log(value));
 
     /**
      * Initialize SOAP Service
@@ -33,15 +36,13 @@ export function initContainer() : ServiceContainer {
      */
     const userRepository = new UserRepositoryPrisma();
     const contentRepository = new ContentRepositoryPrisma();
-    const directorRepository = new DirectorRepositoryPrisma();
     const categoryRepository = new CategoryRepositoryPrisma()
     const genreRepository = new GenreRepositoryPrisma();
-    const actorRepository = new ActorRepositoryPrisma();
+    const actorRepository = new SponsorRepositoryPrisma();
     const repositoryContainer = RepositoryContainer.getInstance(
         userRepository,
         contentRepository,
         categoryRepository,
-        directorRepository,
         genreRepository,
         actorRepository
     );

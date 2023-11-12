@@ -168,9 +168,7 @@ export class UserController {
                     maxAge: JWT_COOKIE_MAX_AGE,
                     httpOnly: true,
                 });
-                return ResponseUtil.sendResponse(res, 200, "Login successful", {
-                    // token: token,
-                });
+                return ResponseUtil.sendResponse(res, 200, "Login successful", null);
             } else {
                 return ResponseUtil.sendError(
                     res,

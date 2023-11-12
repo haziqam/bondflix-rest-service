@@ -5,27 +5,27 @@ import healthRoutes from "./adapters/express/routes/health.route";
 import {UserController} from "./application/controllers/user.controller";
 import {ServiceContainer} from "./containers/service.container";
 import {ContentController} from "./application/controllers/content.controller";
-import {ActorController} from "./application/controllers/actor.controller";
+import {SponsorController} from "./application/controllers/sponsor.controller";
 import {contentRoutes} from "./adapters/express/routes/content.route";
 import {GenreController} from "./application/controllers/genre.controller";
 import {genreRoutes} from "./adapters/express/routes/genre.route";
 import {ResponseUtil} from "./utils/response.utils";
 import {CategoryController} from "./application/controllers/category.controller";
 import {categoryRoutes} from "./adapters/express/routes/category.route";
-import {actorRoutes} from "./adapters/express/routes/actor.route";
+import {sponsorRoutes} from "./adapters/express/routes/sponsor.route";
 import {SubscriptionController} from "./application/controllers/subscription.controller";
 import {subscriptionRoutes} from "./adapters/express/routes/subscription.route";
-import {DirectorController} from "./application/controllers/director.controller";
-import {directorRoutes} from "./adapters/express/routes/director.route";
+import {PublicController} from "./application/controllers/public.controller";
+import {publicRoutes} from "./adapters/express/routes/public.route";
 
 export function routes(app: Express, container: ServiceContainer){
     const userController = new UserController(container.getUserService());
     const contentController = new ContentController(container.getContentService(), container.getUserService());
     const genreController = new GenreController(container.getGenreService());
     const categoryController = new CategoryController(container.getCategoryService());
-    const actorController = new ActorController(container.getActorService());
+    const sponsorController = new SponsorController(container.getSponsorService());
     const subscriptionController = new SubscriptionController(container.getSubscriptionService());
-    const directorController = new DirectorController(container.getDirectorService());
+    const publicController = new PublicController();
 
     app.use('/api/v1/health', healthRoutes);
     app.use('/api/v1/users', userRoutes(userController));
@@ -33,9 +33,9 @@ export function routes(app: Express, container: ServiceContainer){
     app.use('/api/v1/contents', contentRoutes(contentController));
     app.use('/api/v1/genres', genreRoutes(genreController));
     app.use('/api/v1/categories', categoryRoutes(categoryController));
-    app.use('/api/v1/actors', actorRoutes(actorController));
+    app.use('/api/v1/sponsors', sponsorRoutes(sponsorController));
     app.use('/api/v1/subscriptions', subscriptionRoutes(subscriptionController));
-    app.use('/api/v1/directors', directorRoutes(directorController));
+    app.use('/api/v1/public', publicRoutes(publicController));
 
     /**
      * Handling errors and not found routes

@@ -1,21 +1,26 @@
-import { SoapUtils } from "../../utils/soap.utils";
+import {SoapUtils} from "../../utils/soap.utils";
+import {UserRepository} from "../../interfaces/repositories/user.repository";
 
 export class SoapClient {
     private static instance: SoapClient;
     private soapUtils: SoapUtils;
+    private userRepository: UserRepository;
 
-    private constructor(url: string) {
+    private constructor(url: string, userRepository: UserRepository) {
         this.soapUtils = new SoapUtils(url);
+        this.userRepository = userRepository;
     }
 
-    public static getInstance(url?: string): SoapClient {
+    // @ts-ignore
+    public static getInstance(url?: string, userRepository?: UserRepository): SoapClient {
         if (!SoapClient.instance) {
             const soapServiceURL = process.env.SOAP_SERVICE_URL;
-            if (url == null || (url == "" && soapServiceURL != undefined)) {
+            if (url == null || url == '' && soapServiceURL != undefined && userRepository != undefined) {
                 // @ts-ignore
                 SoapClient.instance = new SoapClient(soapServiceURL);
             } else {
-                SoapClient.instance = new SoapClient(url);
+                // @ts-ignore
+                SoapClient.instance = new SoapClient(url, userRepository);
             }
         }
         return SoapClient.instance;
@@ -24,56 +29,34 @@ export class SoapClient {
     public async getAdd(a: number, b: number) {
         const args = {
             arg1: a,
-            arg2: b,
+            arg2: b
         };
         return await this.soapUtils.call("add", args);
     }
 
-    public async addCreatorSubscriberRelationship(
-        creatorId: number,
-        subscriberId: number
-    ) {
-        const args = {
-            creatorId,
-            subscriberId,
-        };
-
-        return await this.soapUtils.call(
-            "addCreatorSubscriberRelationship",
-            args
-        );
+    public async addCreatorSubscriberRelationship(creatorId: number, subscriberId: number) {
+        const args= {
+            creatorId: creatorId,
+            subscriberId: subscriberId
+        }
+        return await this.soapUtils.call("addCreatorSubscriberRelationship", args)
     }
 
-    public async isUserSubscribedToCreator(userId: number, creatorId: number) {
-        const args = {
+    async isUserSubscribedToCreator(
+        userId: number,
+        creatorId: number
+    ): Promise<boolean> {
+        const existingUser = await this.userRepository.findById(userId);
+        if (!existingUser) {
+            return false;
+        }
+        const existingCreator = await this.userRepository.findById(creatorId);
+        if (!existingCreator) {
+            return false;
+        }
+        return await SoapClient.getInstance().isUserSubscribedToCreator(
             userId,
-            creatorId,
-        };
-
-        return await this.soapUtils.call("isUserSubscribedToCreator", args);
-    }
-
-    public async getSubscribedUsers() {
-        const args = {};
-        return await this.soapUtils.call("getSubscribedUsers", args);
-    }
-
-    public async updateSubscriptionByCreatorId(
-        creatorId: number,
-        subscriberId: number,
-        subscriptionStatus: boolean
-    ) {
-        const args = { creatorId, subscriberId, subscriptionStatus };
-        return await this.soapUtils.call("updateSubscriptionByCreatorId", args);
-    }
-
-    public async getSubscribersByCreatorId(creatorId: number) {
-        const args = { creatorId };
-        return await this.soapUtils.call("getSubscribersByCreatorId", args);
-    }
-
-    public async getCreatorsBySubscriberId(subscriberId: number) {
-        const args = { subscriberId };
-        return await this.soapUtils.call("getCreatorsBySubscriberId", args);
+            creatorId
+        );
     }
 }

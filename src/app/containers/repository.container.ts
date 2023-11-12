@@ -1,51 +1,45 @@
 import {UserRepository} from '../interfaces/repositories/user.repository';
 import {ContentRepository} from '../interfaces/repositories/content.repository';
 import {CategoryRepository} from '../interfaces/repositories/category.repository';
-import {DirectorRepository} from '../interfaces/repositories/director.repository';
 import {GenreRepository} from '../interfaces/repositories/genre.repository';
-import {ActorRepository} from '../interfaces/repositories/actor.repository';
+import {SponsorRepository} from '../interfaces/repositories/sponsor.repository';
 
 export class RepositoryContainer {
     private static instance: RepositoryContainer;
     private userRepository: UserRepository;
     private contentRepository: ContentRepository;
     private categoryRepository: CategoryRepository;
-    private directorRepository: DirectorRepository;
     private genreRepository: GenreRepository;
-    private actorRepository: ActorRepository;
+    private sponsorRepository: SponsorRepository;
 
     private constructor(
         userRepository: UserRepository,
         contentRepository: ContentRepository,
         categoryRepository: CategoryRepository,
-        directorRepository: DirectorRepository,
         genreRepository: GenreRepository,
-        actorRepository: ActorRepository
+        sponsorRepository: SponsorRepository
     ) {
         this.userRepository = userRepository;
         this.contentRepository = contentRepository;
         this.categoryRepository = categoryRepository;
-        this.directorRepository = directorRepository;
         this.genreRepository = genreRepository;
-        this.actorRepository = actorRepository;
+        this.sponsorRepository = sponsorRepository;
     }
 
     public static getInstance(
         userRepository: UserRepository,
         contentRepository: ContentRepository,
         categoryRepository: CategoryRepository,
-        directorRepository: DirectorRepository,
         genreRepository: GenreRepository,
-        actorRepository: ActorRepository
+        sponsorRepository: SponsorRepository
     ): RepositoryContainer {
         if (!RepositoryContainer.instance) {
             RepositoryContainer.instance = new RepositoryContainer(
                 userRepository,
                 contentRepository,
                 categoryRepository,
-                directorRepository,
                 genreRepository,
-                actorRepository
+                sponsorRepository
             );
         }
         return RepositoryContainer.instance;
@@ -63,15 +57,11 @@ export class RepositoryContainer {
         return this.categoryRepository;
     }
 
-    public getDirectorRepository(): DirectorRepository {
-        return this.directorRepository;
-    }
-
     public getGenreRepository(): GenreRepository {
         return this.genreRepository;
     }
 
-    public getActorRepository(): ActorRepository {
-        return this.actorRepository;
+    public getSponsorRepository(): SponsorRepository {
+        return this.sponsorRepository;
     }
 }

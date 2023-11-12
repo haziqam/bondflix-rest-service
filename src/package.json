@@ -3,10 +3,15 @@
   "version": "1.0.0",
   "description": "",
   "main": "./app/index.ts",
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
   "scripts": {
     "build": "tsc",
-    "start": "nodemon -L",
-    "migrate": "npx prisma migrate dev"
+    "dev": "nodemon -L",
+    "start": "yarn migrate && yarn seed && nodemon -L",
+    "migrate": "npx prisma migrate dev",
+    "seed": "npx prisma db seed"
   },
   "keywords": [],
   "author": "",
@@ -17,7 +22,9 @@
     "@types/cors": "^2.8.14",
     "@types/express": "^4.17.19",
     "@types/jsonwebtoken": "^9.0.4",
+    "@types/multer": "^1.4.10",
     "@types/node": "^20.8.6",
+    "@types/redis": "^4.0.11",
     "nodemon": "^3.0.1",
     "prisma": "^5.5.0",
     "ts-node": "^10.9.1",
@@ -25,7 +32,6 @@
   },
   "dependencies": {
     "@prisma/client": "^5.4.2",
-    "@types/redis": "^4.0.11",
     "axios": "^1.5.1",
     "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.6",
@@ -33,6 +39,7 @@
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.2",
+    "multer": "^1.4.5-lts.1",
     "redis": "^4.6.10",
     "xml-js": "^1.6.11",
     "zod": "^3.22.4"

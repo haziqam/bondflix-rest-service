@@ -24,6 +24,7 @@ services:
       dockerfile: dockerfile/Dockerfile.nodejs.dev
     volumes:
       - ./src:/app
+      - /app/node_modules
     ports:
       - "3000:3000"
     command: yarn start

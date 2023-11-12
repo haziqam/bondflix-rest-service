@@ -15,6 +15,8 @@ import {categoryRoutes} from "./adapters/express/routes/category.route";
 import {sponsorRoutes} from "./adapters/express/routes/sponsor.route";
 import {SubscriptionController} from "./application/controllers/subscription.controller";
 import {subscriptionRoutes} from "./adapters/express/routes/subscription.route";
+import {PublicController} from "./application/controllers/public.controller";
+import {publicRoutes} from "./adapters/express/routes/public.route";
 
 export function routes(app: Express, container: ServiceContainer){
     const userController = new UserController(container.getUserService());
@@ -23,6 +25,7 @@ export function routes(app: Express, container: ServiceContainer){
     const categoryController = new CategoryController(container.getCategoryService());
     const sponsorController = new SponsorController(container.getSponsorService());
     const subscriptionController = new SubscriptionController(container.getSubscriptionService());
+    const publicController = new PublicController();
 
     app.use('/api/v1/health', healthRoutes);
     app.use('/api/v1/users', userRoutes(userController));
@@ -32,6 +35,7 @@ export function routes(app: Express, container: ServiceContainer){
     app.use('/api/v1/categories', categoryRoutes(categoryController));
     app.use('/api/v1/sponsors', sponsorRoutes(sponsorController));
     app.use('/api/v1/subscriptions', subscriptionRoutes(subscriptionController));
+    app.use('/api/v1/public', publicRoutes(publicController));
 
     /**
      * Handling errors and not found routes

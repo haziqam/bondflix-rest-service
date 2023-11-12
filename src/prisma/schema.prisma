@@ -35,8 +35,7 @@ model Content {
   uploaded_at         DateTime
   genres              Genre[]
   categories          Category[]
-  directors           Director[]
-  actors              Actor[]
+  sponsors            Sponsor[]
 }
 
 model Genre {
@@ -51,14 +50,17 @@ model Category {
   content Content[]
 }
 
-model Director {
+model Sponsor {
   id      Int    @id @default(autoincrement())
   name    String  @unique
+  sponsor_status SponsorStatus
+  link    String
   content Content[]
 }
 
-model Actor {
-  id      Int    @id @default(autoincrement())
-  name    String  @unique
-  content Content[]
+enum SponsorStatus {
+  INVIDIDUAL
+  ORGANIZATION
+  COMPANY
+  GOVERNMENT
 }

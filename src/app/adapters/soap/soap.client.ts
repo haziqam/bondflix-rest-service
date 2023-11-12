@@ -34,7 +34,6 @@ export class SoapClient {
             creatorId: creatorId,
             subscriberId: subscriberId
         }
-
         return await this.soapUtils.call("addCreatorSubscriberRelationship", args)
     }
 }

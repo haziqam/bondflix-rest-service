@@ -1,3 +1,6 @@
+-- CreateEnum
+CREATE TYPE "SponsorStatus" AS ENUM ('INVIDIDUAL', 'ORGANIZATION', 'COMPANY', 'GOVERNMENT');
+
 -- CreateTable
 CREATE TABLE "User" (
     "id" SERIAL NOT NULL,
@@ -41,19 +44,13 @@ CREATE TABLE "Category" (
 );
 
 -- CreateTable
-CREATE TABLE "Director" (
+CREATE TABLE "Sponsor" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
+    "sponsor_status" "SponsorStatus" NOT NULL,
+    "link" TEXT NOT NULL,
 
-    CONSTRAINT "Director_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "Actor" (
-    "id" SERIAL NOT NULL,
-    "name" TEXT NOT NULL,
-
-    CONSTRAINT "Actor_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Sponsor_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -63,19 +60,13 @@ CREATE TABLE "_ContentToGenre" (
 );
 
 -- CreateTable
-CREATE TABLE "_ContentToDirector" (
+CREATE TABLE "_ContentToSponsor" (
     "A" INTEGER NOT NULL,
     "B" INTEGER NOT NULL
 );
 
 -- CreateTable
 CREATE TABLE "_CategoryToContent" (
-    "A" INTEGER NOT NULL,
-    "B" INTEGER NOT NULL
-);
-
--- CreateTable
-CREATE TABLE "_ActorToContent" (
     "A" INTEGER NOT NULL,
     "B" INTEGER NOT NULL
 );
@@ -93,10 +84,7 @@ CREATE UNIQUE INDEX "Genre_name_key" ON "Genre"("name");
 CREATE UNIQUE INDEX "Category_name_key" ON "Category"("name");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Director_name_key" ON "Director"("name");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Actor_name_key" ON "Actor"("name");
+CREATE UNIQUE INDEX "Sponsor_name_key" ON "Sponsor"("name");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "_ContentToGenre_AB_unique" ON "_ContentToGenre"("A", "B");
@@ -105,22 +93,16 @@ CREATE UNIQUE INDEX "_ContentToGenre_AB_unique" ON "_ContentToGenre"("A", "B");
 CREATE INDEX "_ContentToGenre_B_index" ON "_ContentToGenre"("B");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "_ContentToDirector_AB_unique" ON "_ContentToDirector"("A", "B");
+CREATE UNIQUE INDEX "_ContentToSponsor_AB_unique" ON "_ContentToSponsor"("A", "B");
 
 -- CreateIndex
-CREATE INDEX "_ContentToDirector_B_index" ON "_ContentToDirector"("B");
+CREATE INDEX "_ContentToSponsor_B_index" ON "_ContentToSponsor"("B");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "_CategoryToContent_AB_unique" ON "_CategoryToContent"("A", "B");
 
 -- CreateIndex
 CREATE INDEX "_CategoryToContent_B_index" ON "_CategoryToContent"("B");
-
--- CreateIndex
-CREATE UNIQUE INDEX "_ActorToContent_AB_unique" ON "_ActorToContent"("A", "B");
-
--- CreateIndex
-CREATE INDEX "_ActorToContent_B_index" ON "_ActorToContent"("B");
 
 -- AddForeignKey
 ALTER TABLE "Content" ADD CONSTRAINT "Content_creator_id_fkey" FOREIGN KEY ("creator_id") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -132,19 +114,13 @@ ALTER TABLE "_ContentToGenre" ADD CONSTRAINT "_ContentToGenre_A_fkey" FOREIGN KE
 ALTER TABLE "_ContentToGenre" ADD CONSTRAINT "_ContentToGenre_B_fkey" FOREIGN KEY ("B") REFERENCES "Genre"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_ContentToDirector" ADD CONSTRAINT "_ContentToDirector_A_fkey" FOREIGN KEY ("A") REFERENCES "Content"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_ContentToSponsor" ADD CONSTRAINT "_ContentToSponsor_A_fkey" FOREIGN KEY ("A") REFERENCES "Content"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_ContentToDirector" ADD CONSTRAINT "_ContentToDirector_B_fkey" FOREIGN KEY ("B") REFERENCES "Director"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_ContentToSponsor" ADD CONSTRAINT "_ContentToSponsor_B_fkey" FOREIGN KEY ("B") REFERENCES "Sponsor"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_CategoryToContent" ADD CONSTRAINT "_CategoryToContent_A_fkey" FOREIGN KEY ("A") REFERENCES "Category"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_CategoryToContent" ADD CONSTRAINT "_CategoryToContent_B_fkey" FOREIGN KEY ("B") REFERENCES "Content"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "_ActorToContent" ADD CONSTRAINT "_ActorToContent_A_fkey" FOREIGN KEY ("A") REFERENCES "Actor"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "_ActorToContent" ADD CONSTRAINT "_ActorToContent_B_fkey" FOREIGN KEY ("B") REFERENCES "Content"("id") ON DELETE CASCADE ON UPDATE CASCADE;

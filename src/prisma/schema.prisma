@@ -59,7 +59,7 @@ model Sponsor {
 }
 
 enum SponsorStatus {
-  INVIDIDUAL
+  INDIVIDUAL
   ORGANIZATION
   COMPANY
   GOVERNMENT

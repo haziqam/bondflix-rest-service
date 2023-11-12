@@ -15,9 +15,9 @@ export class SponsorController {
 
     async createSponsor(req: Request, res: Response) {
         try {
-            const { name } = CreateSponsorSchema.parse(req.body);
+            const { name, sponsor_status, link } = CreateSponsorSchema.parse(req.body);
 
-            const createdSponsor = await this.sponsorService.createSponsor(name);
+            const createdSponsor = await this.sponsorService.createSponsor(name, sponsor_status, link);
 
             if (createdSponsor) {
                 return ResponseUtil.sendResponse(res, 201, 'Sponsor created successfully', createdSponsor);
@@ -25,6 +25,7 @@ export class SponsorController {
                 return ResponseUtil.sendError(res, 500, 'Sponsor creation failed', null);
             }
         } catch (error) {
+            console.log(error)
             handle_error(res, error);
         }
     }

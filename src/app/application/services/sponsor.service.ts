@@ -1,4 +1,4 @@
-import {Sponsor} from '@prisma/client';
+import {Sponsor, SponsorStatus} from '@prisma/client';
 import {SponsorRepository} from "../../interfaces/repositories/sponsor.repository";
 
 /**
@@ -16,10 +16,12 @@ export class SponsorService {
         this.sponsorRepository = sponsorRepository;
     }
 
-    async createSponsor(sponsorName: string): Promise<boolean> {
+    async createSponsor(sponsorName: string, sponsorStatus: SponsorStatus, link: string): Promise<boolean> {
         //@ts-ignore
         const newSponsor : Sponsor = {
-            name: sponsorName
+            name: sponsorName,
+            sponsor_status: sponsorStatus,
+            link: link,
         }
 
         await this.sponsorRepository.create(newSponsor);

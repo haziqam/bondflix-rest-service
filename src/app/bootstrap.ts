@@ -7,6 +7,7 @@ import {GenreRepositoryPrisma} from "./adapters/prisma/database/genre.repository
 import {SponsorRepositoryPrisma} from "./adapters/prisma/database/sponsor.repository.prisma";
 import {CategoryRepositoryPrisma} from "./adapters/prisma/database/category.repository.prisma";
 import {SoapClient} from "./adapters/soap/soap.client";
+import {RedisClient} from "./adapters/redis/redis.client";
 
 
 export function initContainer() : ServiceContainer {
@@ -19,7 +20,10 @@ export function initContainer() : ServiceContainer {
     /**
      * Initialize Redis Client
      */
-
+    RedisClient.getInstance();
+    // const redisClient = RedisClient.getInstance();
+    //     redisClient.set('testKey', 'testValueasdasdas').then(() => {});
+    //     redisClient.get('testKey').then(value => console.log(value));
 
     /**
      * Initialize SOAP Service

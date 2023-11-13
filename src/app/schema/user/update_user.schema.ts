@@ -5,5 +5,6 @@ export const UpdateUserSchema = z.object({
     name: z.string().min(1, 'Name must not be empty').optional(),
     email: z.string().min(1, 'Email must not be empty').optional(),
     password: z.string().min(1, 'Password must not be empty').optional(),
+    pp_url: z.string().min(1, 'PP url must not be empty').optional(),
     isAdmin: z.boolean().optional(),
 });

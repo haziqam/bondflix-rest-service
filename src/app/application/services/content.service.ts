@@ -1,5 +1,6 @@
 import {Content} from '@prisma/client';
 import {ContentRepository} from '../../interfaces/repositories/content.repository';
+import {deleteFile} from "../../utils/delete_file.utils";
 
 export class ContentService {
     private contentRepository: ContentRepository;
@@ -36,6 +37,14 @@ export class ContentService {
         if (!existingContent) {
             return false;
         }
+
+        if (existingContent.content_file_path !== null && existingContent.thumbnail_file_path !== null) {
+            // @ts-ignore
+            await deleteFile(existingContent.content_file_path)
+            // @ts-ignore
+            await deleteFile(existingContent.thumbnail_file_path)
+        }
+
         updatedContent.id = contentId;
         await this.contentRepository.update(updatedContent);
         return true;
@@ -43,10 +52,15 @@ export class ContentService {
 
     async deleteContent(contentId: number): Promise<boolean> {
         const existingContent = await this.contentRepository.findById(contentId);
+
+        // @ts-ignore
+        await deleteFile(existingContent.content_file_path)
+        // @ts-ignore
+        await deleteFile(existingContent.thumbnail_file_path)
+
         if (!existingContent) {
             return false;
         }
-
         await this.contentRepository.delete(contentId);
         return true;
     }

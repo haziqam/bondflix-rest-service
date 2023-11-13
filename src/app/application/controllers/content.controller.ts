@@ -5,6 +5,8 @@ import {CreateContentSchema} from "../../schema/content/create_content.schema";
 import {UpdateContentSchema} from "../../schema/content/update_content.schema";
 import {UserService} from "../services/user.service";
 import {handle_error} from "../../utils/handle_error.utils";
+import {RedisClient} from "../../adapters/redis/redis.client";
+import {deleteFile} from "../../utils/delete_file.utils";
 
 export class ContentController {
     private contentService: ContentService;
@@ -16,9 +18,14 @@ export class ContentController {
     }
     async createContent(req: Request, res: Response) {
         try {
-            const { title, creator_id, description, content_file_path, thumbnail_file_path } = CreateContentSchema.parse(req.body);
-
+            let { title, creator_id, description } = req.body;
+            creator_id = parseInt(creator_id, 10)
             const release_date = new Date(req.body.release_date);
+
+            // @ts-ignore
+            const contentFilePath = req.files['content_file'] ? req.files['content_file'][0].path : null;
+            // @ts-ignore
+            const thumbnailFilePath = req.files['thumbnail_file'] ? req.files['thumbnail_file'][0].path : null;
 
             const creator = await this.userService.findUserById(creator_id);
             if (!creator) {
@@ -30,8 +37,8 @@ export class ContentController {
                 creator_id,
                 description,
                 release_date,
-                content_file_path,
-                thumbnail_file_path
+                contentFilePath,
+                thumbnailFilePath
             );
 
             if (createdContent) {
@@ -40,10 +47,10 @@ export class ContentController {
                 return ResponseUtil.sendError(res, 500, 'Content creation failed', null);
             }
         } catch (error) {
+            console.log(error)
             handle_error(res, error);
         }
     }
-
 
     async updateContent(req: Request, res: Response) {
         try {
@@ -54,9 +61,16 @@ export class ContentController {
                 updatedContent.release_date = new Date(updatedContent.release_date);
             }
 
-            const creator = await this.userService.findUserById(updatedContent.creator_id);
-            if (!creator) {
-                return ResponseUtil.sendError(res, 404, "Creator not found", null);
+            //@ts-ignore
+            updatedContent.content_file_path = req.files['content_file'] ? req.files['content_file'][0].path : null;
+            // @ts-ignore
+            updatedContent.thumbnail_file_path = req.files['thumbnail_file'] ? req.files['thumbnail_file'][0].path : null;
+
+            if (updatedContent.creator_id) {
+                const creator = await this.userService.findUserById(updatedContent.creator_id);
+                if (!creator) {
+                    return ResponseUtil.sendError(res, 404, "Creator not found", null);
+                }
             }
 
             //@ts-ignore
@@ -82,6 +96,7 @@ export class ContentController {
                 return ResponseUtil.sendError(res, 404, 'Content not found or deletion failed', null);
             }
         } catch (error) {
+            console.log(error)
             handle_error(res, error);
         }
     }
@@ -104,9 +119,19 @@ export class ContentController {
 
     async getAllContent(req: Request, res: Response) {
         try {
-            const allContent = await this.contentService.getAllContents();
+            const redisClient = RedisClient.getInstance();
+            let allContentString = await redisClient.get("allContent");
 
-            if (allContent && allContent.length > 0) {
+            let allContent;
+            if (allContentString == null) {
+                allContent = await this.contentService.getAllContents();
+                allContentString = JSON.stringify(allContent);
+                await redisClient.set("allContent", allContentString, 300);
+            } else {
+                allContent = JSON.parse(allContentString);
+            }
+
+            if (allContent) {
                 return ResponseUtil.sendResponse(res, 200, 'Success', allContent);
             } else {
                 return ResponseUtil.sendResponse(res, 404, 'No content found', null);
@@ -115,5 +140,6 @@ export class ContentController {
             handle_error(res, error);
         }
     }
+
 
 }

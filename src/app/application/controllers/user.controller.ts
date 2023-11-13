@@ -1,12 +1,12 @@
-import { Request, Response } from "express";
-import { UserService } from "../services/user.service";
-import { ResponseUtil } from "../../utils/response.utils";
-import { LoginSchema } from "../../schema/auth/login.schema";
-import { RegisterSchema } from "../../schema/auth/register.schema";
-import { CreateUserSchema } from "../../schema/user/create_user.schema";
-import { UpdateUserSchema } from "../../schema/user/update_user.schema";
-import { handle_error } from "../../utils/handle_error.utils";
-import { verifyJWT } from "../../utils/jwt.utils";
+import {Request, Response} from "express";
+import {UserService} from "../services/user.service";
+import {ResponseUtil} from "../../utils/response.utils";
+import {LoginSchema} from "../../schema/auth/login.schema";
+import {RegisterSchema} from "../../schema/auth/register.schema";
+import {CreateUserSchema} from "../../schema/user/create_user.schema";
+import {UpdateUserSchema} from "../../schema/user/update_user.schema";
+import {handle_error} from "../../utils/handle_error.utils";
+import {verifyJWT} from "../../utils/jwt.utils";
 
 const JWT_COOKIE_MAX_AGE = 1800000;
 
@@ -100,6 +100,8 @@ export class UserController {
         try {
             const userId = parseInt(req.params.id, 10);
             const { ...updatedUser } = UpdateUserSchema.parse(req.body);
+            // @ts-ignore
+            updatedUser.pp_url = req.files['picture_file'] ? req.files['picture_file'][0].path : null
             const success = await this.userService.updateUser(
                 userId,
                 updatedUser
@@ -167,8 +169,14 @@ export class UserController {
                 res.cookie("bondflix-auth-jwt", token, {
                     maxAge: JWT_COOKIE_MAX_AGE,
                     httpOnly: true,
+                    sameSite: "strict",
                 });
-                return ResponseUtil.sendResponse(res, 200, "Login successful", null);
+                return ResponseUtil.sendResponse(
+                    res,
+                    200,
+                    "Login successful",
+                    null
+                );
             } else {
                 return ResponseUtil.sendError(
                     res,

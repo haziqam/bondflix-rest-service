@@ -1,6 +1,7 @@
 import {Request, Response, Router} from 'express';
 import {UserController} from "../../../application/controllers/user.controller";
 import {admin_jwt_middleware} from "../middlewares/admin_jwt_auth.middleware";
+import {uploadFile} from "../../../utils/upload_file.utils";
 
 export function userRoutes(controller: UserController): Router {
     const router = Router();
@@ -28,7 +29,9 @@ export function userRoutes(controller: UserController): Router {
     /**
      * Update user by ID
      */
-    router.put('/:id', (req: Request, res: Response) => {
+    router.put('/:id', uploadFile.fields([
+        { name: 'picture_file', maxCount: 1 },
+    ]), (req: Request, res: Response) => {
         controller.updateUser(req, res).then(() => {});
     });
 

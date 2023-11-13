@@ -2,6 +2,7 @@ import {User} from '@prisma/client';
 import {UserRepository} from "../../interfaces/repositories/user.repository";
 import {compareHashedString, hashString} from "../../utils/hash_string.utils";
 import {signJWT} from "../../utils/jwt.utils";
+import {deleteFile} from "../../utils/delete_file.utils";
 
 /**
  * What to do in Services:
@@ -73,6 +74,11 @@ export class UserService {
         const existingUser = await this.userRepository.findById(id);
         if (!existingUser) {
             return false;
+        }
+
+        // Kalo udah ada filenya apus, terus upload yang baru
+        if (existingUser.pp_url !== "default.png") {
+            await deleteFile(existingUser.pp_url)
         }
 
         //@ts-ignore

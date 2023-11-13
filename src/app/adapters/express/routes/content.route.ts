@@ -2,6 +2,7 @@ import {Request, Response, Router} from 'express';
 import {ContentController} from '../../../application/controllers/content.controller';
 import {admin_jwt_middleware} from "../middlewares/admin_jwt_auth.middleware";
 import {user_jwt_middleware} from "../middlewares/user_jwt_auth.middleware";
+import {uploadFile} from "../../../utils/upload_file.utils";
 
 export function contentRoutes(controller: ContentController): Router {
     const router = Router();
@@ -9,14 +10,20 @@ export function contentRoutes(controller: ContentController): Router {
     /**
      * Create content
      */
-    router.post('/', admin_jwt_middleware, (req: Request, res: Response) => {
+    router.post('/', admin_jwt_middleware, uploadFile.fields([
+        { name: 'content_file', maxCount: 1 },
+        { name: 'thumbnail_file', maxCount: 1 }
+    ]), (req: Request, res: Response) => {
         controller.createContent(req, res).then(() => {});
     });
 
     /**
      * Update content by id
      */
-    router.put('/:id', admin_jwt_middleware, (req: Request, res: Response) => {
+    router.put('/:id', admin_jwt_middleware,uploadFile.fields([
+        { name: 'content_file', maxCount: 1 },
+        { name: 'thumbnail_file', maxCount: 1 }
+    ]), (req: Request, res: Response) => {
         controller.updateContent(req, res).then(() => {});
     });
 

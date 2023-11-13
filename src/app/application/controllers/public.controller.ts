@@ -1,6 +1,5 @@
 import {Request, Response} from "express";
 import {handle_error} from "../../utils/handle_error.utils";
-import {upload} from "../../utils/upload_file.utils";
 import {deleteFile} from "../../utils/delete_file.utils";
 import {ResponseUtil} from "../../utils/response.utils";
 
@@ -9,17 +8,9 @@ export class PublicController {
 
     }
 
-
     uploadFile(req: Request, res: Response) {
         try {
-            const uploadMiddleware = upload.single('file');
-
-            uploadMiddleware(req, res, (err: any) => {
-                if (err) {
-                    return handle_error(res, err);
-                }
-                return ResponseUtil.sendResponse(res, 200, "File Uploaded Successfully", null)
-            });
+            return ResponseUtil.sendResponse(res, 200, "File Uploaded Successfully", req.file);
         } catch (error) {
             handle_error(res, error);
         }
@@ -31,6 +22,7 @@ export class PublicController {
             await deleteFile(filename);
             return ResponseUtil.sendResponse(res, 200, "Success file deletion", null)
         } catch (error) {
+            console.log(error)
             handle_error(res, error);
         }
     }

@@ -5,6 +5,7 @@ import {CreateContentSchema} from "../../schema/content/create_content.schema";
 import {UpdateContentSchema} from "../../schema/content/update_content.schema";
 import {UserService} from "../services/user.service";
 import {handle_error} from "../../utils/handle_error.utils";
+import {RedisClient} from "../../adapters/redis/redis.client";
 
 export class ContentController {
     private contentService: ContentService;
@@ -104,9 +105,19 @@ export class ContentController {
 
     async getAllContent(req: Request, res: Response) {
         try {
-            const allContent = await this.contentService.getAllContents();
+            const redisClient = RedisClient.getInstance();
+            let allContentString = await redisClient.get("allContent");
 
-            if (allContent && allContent.length > 0) {
+            let allContent;
+            if (allContentString == null) {
+                allContent = await this.contentService.getAllContents();
+                allContentString = JSON.stringify(allContent);
+                await redisClient.set("allContent", allContentString, 300);
+            } else {
+                allContent = JSON.parse(allContentString);
+            }
+
+            if (allContent) {
                 return ResponseUtil.sendResponse(res, 200, 'Success', allContent);
             } else {
                 return ResponseUtil.sendResponse(res, 404, 'No content found', null);
@@ -115,5 +126,6 @@ export class ContentController {
             handle_error(res, error);
         }
     }
+
 
 }

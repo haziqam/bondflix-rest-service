@@ -49,3 +49,4 @@ volumes:
 
 networks:
   rest-network:
+    driver: bridge

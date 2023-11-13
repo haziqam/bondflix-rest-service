@@ -167,8 +167,14 @@ export class UserController {
                 res.cookie("bondflix-auth-jwt", token, {
                     maxAge: JWT_COOKIE_MAX_AGE,
                     httpOnly: true,
+                    sameSite: "strict",
                 });
-                return ResponseUtil.sendResponse(res, 200, "Login successful", null);
+                return ResponseUtil.sendResponse(
+                    res,
+                    200,
+                    "Login successful",
+                    null
+                );
             } else {
                 return ResponseUtil.sendError(
                     res,

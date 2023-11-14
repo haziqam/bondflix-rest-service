@@ -126,7 +126,7 @@ export class ContentController {
             if (allContentString == null) {
                 allContent = await this.contentService.getAllContents();
                 allContentString = JSON.stringify(allContent);
-                await redisClient.set("allContent", allContentString, 300);
+                await redisClient.set("allContent", allContentString, 30);
             } else {
                 allContent = JSON.parse(allContentString);
             }

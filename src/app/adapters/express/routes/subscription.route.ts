@@ -10,5 +10,9 @@ export function subscriptionRoutes(controller: SubscriptionController): Router {
         controller.subscribe(req, res).then(() => {})
     })
 
+    router.get("/subscribers/:creatorId", (req: Request, res: Response) => {
+        controller.getSubscriber(req, res).then(() => {})
+    })
+
     return router;
 }

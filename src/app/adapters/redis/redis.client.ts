@@ -25,6 +25,7 @@ export class RedisClient {
         if (expireInSeconds) {
             await this.client.set(key, value, {
                 EX: expireInSeconds,
+                NX: true
             });
         } else {
             await this.client.set(key, value);

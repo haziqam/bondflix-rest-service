@@ -46,17 +46,19 @@ export class SoapClient {
         userId: number,
         creatorId: number
     ): Promise<boolean> {
-        const existingUser = await this.userRepository.findById(userId);
-        if (!existingUser) {
-            return false;
+        const args = {
+            userId: userId,
+            creatorId: creatorId,
         }
-        const existingCreator = await this.userRepository.findById(creatorId);
-        if (!existingCreator) {
-            return false;
+        return await this.soapUtils.call("isUserSubscribedToCreator", args);
+    }
+
+    async getAllSubscriberFromCreator(
+        creatorId: number,
+    ): Promise<Object> {
+        const args = {
+            creatorId: creatorId,
         }
-        return await SoapClient.getInstance().isUserSubscribedToCreator(
-            userId,
-            creatorId
-        );
+        return await this.soapUtils.call("getSubscribersByCreatorId", args);
     }
 }

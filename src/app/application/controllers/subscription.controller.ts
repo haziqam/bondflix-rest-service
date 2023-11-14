@@ -32,4 +32,24 @@ export class SubscriptionController {
             handle_error(res, error);
         }
     }
+
+    async getSubscriber(req: Request, res: Response) {
+        try {
+            const creatorId = parseInt(req.params.creatorId, 10);
+            if (!creatorId){
+                return ResponseUtil.sendError(res, 401, "Creator ID can't be empty", null);
+            }
+
+            const subscriberIds = await this.subscriptionService.getSubscribers(creatorId);
+            if (subscriberIds) {
+                return ResponseUtil.sendResponse(res, 200, "Subscriber list", subscriberIds)
+            } else {
+                return ResponseUtil.sendError(res, 500, "Can't get subscribers", null)
+            }
+
+
+        } catch (error) {
+            handle_error(res, error)
+        }
+    }
 }

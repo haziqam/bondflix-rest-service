@@ -39,4 +39,16 @@ export class SubscriptionService {
             creatorId
         );
     }
+
+    async getSubscribers(
+        creatorId: number
+    ): Promise<Object> {
+        const existingCreator = await this.userRepository.findById(creatorId);
+        if (!existingCreator) {
+            return false;
+        }
+        return await SoapClient.getInstance().getAllSubscriberFromCreator(
+            creatorId
+        );
+    }
 }

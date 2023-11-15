@@ -20,6 +20,7 @@ import {publicRoutes} from "./adapters/express/routes/public.route";
 import path from "path";
 import {access_content_middleware} from "./adapters/express/middlewares/access_content.middleware";
 import {serve_file} from "./adapters/express/middlewares/serve_file.middleware";
+import {access_thumbnail_middleware} from "./adapters/express/middlewares/access_thumbnail.middleware";
 
 export function routes(app: Express, container: ServiceContainer){
     const userController = new UserController(container.getUserService());
@@ -39,12 +40,12 @@ export function routes(app: Express, container: ServiceContainer){
     app.use('/api/v1/sponsors', sponsorRoutes(sponsorController));
     app.use('/api/v1/subscriptions', subscriptionRoutes(subscriptionController));
     app.use('/api/v1/public', publicRoutes(publicController, container.getContentService(), container.getSubscriptionService()));
-    app.use('/static/thumbnails', access_content_middleware(container.getContentService(), container.getSubscriptionService()), serve_file);
+    app.use('/static/thumbnails', access_thumbnail_middleware(container.getContentService(), container.getSubscriptionService()), serve_file);
     // app.use('/static/pictures', access_content_middleware(container.getContentService(), container.getSubscriptionService()), serve_file);
     app.use('/static/contents', access_content_middleware(container.getContentService(), container.getSubscriptionService()), serve_file);
 
     // @ts-ignore
-    
+
     /**
      * Handling errors and not found routes
      */

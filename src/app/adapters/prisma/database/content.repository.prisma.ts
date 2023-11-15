@@ -35,7 +35,11 @@ export class ContentRepositoryPrisma implements ContentRepository {
 
     async findAll() {
         return prisma.content.findMany({
-            include: { user: true }
+            include: {
+                user: true,
+                genres: true,
+                categories: true,
+            }
         });
     }
 }

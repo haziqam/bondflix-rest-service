@@ -1,7 +1,6 @@
 import {Request, Response} from 'express';
 import {ContentService} from '../services/content.service';
 import {ResponseUtil} from '../../utils/response.utils';
-import {CreateContentSchema} from "../../schema/content/create_content.schema";
 import {UpdateContentSchema} from "../../schema/content/update_content.schema";
 import {UserService} from "../services/user.service";
 import {handle_error} from "../../utils/handle_error.utils";

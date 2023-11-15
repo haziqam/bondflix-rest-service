@@ -34,6 +34,7 @@ export class SubscriptionService {
         if (!existingCreator) {
             return false;
         }
+
         return await SoapClient.getInstance().isUserSubscribedToCreator(
             userId,
             creatorId

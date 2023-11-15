@@ -3,6 +3,7 @@ import {UserRepository} from "../../interfaces/repositories/user.repository";
 import {compareHashedString, hashString} from "../../utils/hash_string.utils";
 import {signJWT} from "../../utils/jwt.utils";
 import {deleteFile} from "../../utils/delete_file.utils";
+import {ResponseUtil} from "../../utils/response.utils";
 
 /**
  * What to do in Services:
@@ -41,6 +42,16 @@ export class UserService {
         return signJWT(jwtClaims, "3h");
     }
     async createUser(username: string, name: string, email: string, password: string, isAdmin: boolean): Promise<boolean> {
+        const existingUserUsername = await this.userRepository.findUserByIdentifier(username)
+        if (existingUserUsername){
+            throw Error("Username has been used")
+        }
+
+        const existingUserEmail = await this.userRepository.findUserByIdentifier(email);
+        if (existingUserEmail){
+            throw Error("Email has been used")
+        }
+
         const hashedPassword = await hashString(password);
         if (hashedPassword) {
             //@ts-ignore

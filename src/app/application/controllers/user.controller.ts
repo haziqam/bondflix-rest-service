@@ -197,9 +197,7 @@ export class UserController {
 
     async signup(req: Request, res: Response) {
         try {
-            const { username, name, email, password } = RegisterSchema.parse(
-                req.body
-            );
+            const { username, name, email, password } = RegisterSchema.parse(req.body);
             const success = await this.userService.createUser(
                 username,
                 name,

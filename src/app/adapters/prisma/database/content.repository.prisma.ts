@@ -125,7 +125,6 @@ export class ContentRepositoryPrisma implements ContentRepository {
                 creator_id: creatorId
             },
             include: {
-                user: true,
                 genres: true,
                 categories: true,
             }

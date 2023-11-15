@@ -93,19 +93,7 @@ export class ContentService {
     }
 
     async findContentByCreatorId(creatorId: number) : Promise<Content[] | null> {
-        const contents: Content[] | null = await this.contentRepository.findContentByCreatorId(creatorId);
-        // @ts-ignore
-        if (contents.length === 0) return null;
-        // @ts-ignore
-        return contents.map(content => {
-            //@ts-ignore
-            if (content.user) {
-                //@ts-ignore
-                const {hashedPassword, ...userWithoutPassword} = content.user;
-                return {...content, user: userWithoutPassword};
-            }
-            return content;
-        });
+        return await this.contentRepository.findContentByCreatorId(creatorId);
     }
 
     async getAllContents(): Promise<Content[] | null> {

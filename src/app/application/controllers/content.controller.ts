@@ -6,14 +6,17 @@ import {UserService} from "../services/user.service";
 import {handle_error} from "../../utils/handle_error.utils";
 import {RedisClient} from "../../adapters/redis/redis.client";
 import {parseToArray} from "../../utils/parse_array.utils";
+import {SubscriptionService} from "../services/subscription.service";
 
 export class ContentController {
     private contentService: ContentService;
     private userService: UserService;
+    private subscriptionService: SubscriptionService;
 
-    constructor(contentService: ContentService, userService: UserService) {
+    constructor(contentService: ContentService, userService: UserService, subscriptionService: SubscriptionService) {
         this.contentService = contentService;
         this.userService = userService;
+        this.subscriptionService = subscriptionService;
     }
     async createContent(req: Request, res: Response) {
         try {
@@ -129,7 +132,27 @@ export class ContentController {
             const content = await this.contentService.findContentById(contentId);
 
             if (content) {
-                return ResponseUtil.sendResponse(res, 200, 'Content retrieved successfully', content);
+                const contentData = await this.contentService.findContentById(contentId);
+
+                //Ambil creator id
+                const creatorId = contentData?.creator_id
+
+                //Check subscribed or not
+
+                //@ts-ignore
+                if (creatorId === req.userId || req.isAdmin){
+                    return ResponseUtil.sendResponse(res, 200, "Successfully get content", content);
+                }
+
+                //@ts-ignore
+                const success = await this.subscriptionService.isUserSubscribedToCreator(req.userId, creatorId);
+                // @ts-ignore
+                if (!success || success == "false" || success == false) {
+                    return ResponseUtil.sendError(res, 401, "Unauthorized - Subscription required", null);
+                } else {
+                    //@ts-ignore
+                    return ResponseUtil.sendResponse(res, 200, "Successfully get content", content);
+                }
             } else {
                 return ResponseUtil.sendError(res, 404, 'Content not found', null);
             }

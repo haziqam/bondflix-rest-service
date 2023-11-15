@@ -1,5 +1,6 @@
 import {Content, PrismaClient} from '@prisma/client';
 import {ContentRepository} from '../../../interfaces/repositories/content.repository';
+import {undefined} from "zod";
 
 const prisma = new PrismaClient();
 
@@ -34,6 +35,7 @@ export class ContentRepositoryPrisma implements ContentRepository {
     async update(content: Partial<Content>) {
         const contentId = content.id;
 
+        // @ts-ignore
         if (contentId === undefined) {
             throw new Error('Content ID is required for update.');
         }
@@ -103,6 +105,19 @@ export class ContentRepositoryPrisma implements ContentRepository {
         } else {
             throw new Error('No valid category IDs provided.');
         }
+    }
+
+    async findContentByCreatorId(creatorId: number): Promise<Content[] | null> {
+        return prisma.content.findMany({
+            where: {
+                creator_id: creatorId
+            },
+            include: {
+                user: true,
+                genres: true,
+                categories: true,
+            }
+        })
     }
 
 

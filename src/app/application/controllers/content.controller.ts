@@ -186,5 +186,37 @@ export class ContentController {
         }
     }
 
+    async getContentByCreatorId(req: Request, res: Response)  {
+        try {
+            const creatorId = parseInt(req.params.creator_id, 10);
+            const existingCreator = await this.userService.findUserById(creatorId);
+            if (!existingCreator) {
+                return ResponseUtil.sendError(res, 404, "Creator not found", null);
+            }
+
+            //@ts-ignore
+            if (req.userId !== creatorId && !req.isAdmin) {
+                return ResponseUtil.sendError(res, 401, "Unauthorized", null);
+            }
+
+            const contentData = await this.contentService.findContentByCreatorId(creatorId);
+            if (contentData) {
+                //@ts-ignore
+                const success = await this.subscriptionService.isUserSubscribedToCreator(req.userId, creatorId);
+                // @ts-ignore
+                if (!success || success == "false" || success == false) {
+                    return ResponseUtil.sendError(res, 401, "Unauthorized - Subscription required", null);
+                } else {
+                    //@ts-ignore
+                    return ResponseUtil.sendResponse(res, 200, "Successfully get content", contentData);
+                }
+            } else {
+                return ResponseUtil.sendError(res, 404, 'Content not found', null);
+            }
+        } catch (error) {
+            handle_error(res, error);
+        }
+    }
+
 
 }

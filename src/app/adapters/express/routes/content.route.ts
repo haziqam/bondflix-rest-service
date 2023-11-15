@@ -42,6 +42,13 @@ export function contentRoutes(controller: ContentController): Router {
     });
 
     /**
+     * Get content by creator id
+     */
+    router.get('/creator/:creator_id', user_jwt_middleware, (req: Request, res: Response) => {
+        controller.getContentByCreatorId(req, res).then(() => {});
+    });
+
+    /**
      * Get all contents
      */
     router.get('/', (req: Request, res: Response) => {

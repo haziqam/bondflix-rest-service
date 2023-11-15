@@ -92,6 +92,10 @@ export class ContentService {
         return content;
     }
 
+    async findContentByCreatorId(creatorId: number) : Promise<Content[] | null> {
+        return await this.contentRepository.findContentByCreatorId(creatorId);
+    }
+
     async getAllContents(): Promise<Content[] | null> {
         const contents: Content[] | null = await this.contentRepository.findAll();
         // @ts-ignore

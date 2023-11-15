@@ -5,21 +5,28 @@ import {UpdateContentSchema} from "../../schema/content/update_content.schema";
 import {UserService} from "../services/user.service";
 import {handle_error} from "../../utils/handle_error.utils";
 import {RedisClient} from "../../adapters/redis/redis.client";
+import {parseToArray} from "../../utils/parse_array.utils";
+import {SubscriptionService} from "../services/subscription.service";
 
 export class ContentController {
     private contentService: ContentService;
     private userService: UserService;
+    private subscriptionService: SubscriptionService;
 
-    constructor(contentService: ContentService, userService: UserService) {
+    constructor(contentService: ContentService, userService: UserService, subscriptionService: SubscriptionService) {
         this.contentService = contentService;
         this.userService = userService;
+        this.subscriptionService = subscriptionService;
     }
     async createContent(req: Request, res: Response) {
         try {
-            let { title, description } = req.body;
+            let { title, description, genres, categories } = req.body;
             //@ts-ignore
             const creator_id = parseInt(req.userId, 10)
             const release_date = new Date(req.body.release_date);
+
+            genres = typeof genres === 'string' ? parseToArray(genres) : [];
+            categories = typeof categories === 'string' ? parseToArray(categories) : [];
 
             // @ts-ignore
             const contentFilePath = req.files['content_file'] ? req.files['content_file'][0].path : null;
@@ -41,6 +48,7 @@ export class ContentController {
             );
 
             if (createdContent) {
+                await this.contentService.addGenresAndCategories(createdContent.id, genres, categories);
                 return ResponseUtil.sendResponse(res, 201, 'Content created successfully', createdContent);
             } else {
                 return ResponseUtil.sendError(res, 500, 'Content creation failed', null);
@@ -124,7 +132,27 @@ export class ContentController {
             const content = await this.contentService.findContentById(contentId);
 
             if (content) {
-                return ResponseUtil.sendResponse(res, 200, 'Content retrieved successfully', content);
+                const contentData = await this.contentService.findContentById(contentId);
+
+                //Ambil creator id
+                const creatorId = contentData?.creator_id
+
+                //Check subscribed or not
+
+                //@ts-ignore
+                if (creatorId === req.userId || req.isAdmin){
+                    return ResponseUtil.sendResponse(res, 200, "Successfully get content", content);
+                }
+
+                //@ts-ignore
+                const success = await this.subscriptionService.isUserSubscribedToCreator(req.userId, creatorId);
+                // @ts-ignore
+                if (!success || success == "false" || success == false) {
+                    return ResponseUtil.sendError(res, 401, "Unauthorized - Subscription required", null);
+                } else {
+                    //@ts-ignore
+                    return ResponseUtil.sendResponse(res, 200, "Successfully get content", content);
+                }
             } else {
                 return ResponseUtil.sendError(res, 404, 'Content not found', null);
             }

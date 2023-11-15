@@ -23,7 +23,7 @@ import {access_thumbnail_middleware} from "./adapters/express/middlewares/access
 
 export function routes(app: Express, container: ServiceContainer){
     const userController = new UserController(container.getUserService());
-    const contentController = new ContentController(container.getContentService(), container.getUserService());
+    const contentController = new ContentController(container.getContentService(), container.getUserService(), container.getSubscriptionService());
     const genreController = new GenreController(container.getGenreService());
     const categoryController = new CategoryController(container.getCategoryService());
     const sponsorController = new SponsorController(container.getSponsorService());

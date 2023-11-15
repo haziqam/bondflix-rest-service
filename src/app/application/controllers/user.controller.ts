@@ -176,12 +176,23 @@ export class UserController {
                     httpOnly: true,
                     sameSite: "strict",
                 });
-                return ResponseUtil.sendResponse(
-                    res,
-                    200,
-                    "Login successful",
-                    null
-                );
+
+                const decoded = verifyJWT(token);
+                if (decoded) {
+                    return ResponseUtil.sendResponse(
+                        res,
+                        200,
+                        "Login successful",
+                        decoded.payload
+                    );
+                } else {
+                    return ResponseUtil.sendError(
+                        res,
+                        404,
+                        "Authentication failed",
+                        null
+                    );
+                }
             } else {
                 return ResponseUtil.sendError(
                     res,

@@ -99,6 +99,11 @@ export class UserController {
     async updateUser(req: Request, res: Response) {
         try {
             const userId = parseInt(req.params.id, 10);
+            //@ts-ignore
+            if (userId !== req.userId && !req.isAdmin){
+                return ResponseUtil.sendError(res, 401, "Unauthorized", null)
+            }
+
             const { ...updatedUser } = UpdateUserSchema.parse(req.body);
             // @ts-ignore
             updatedUser.pp_url = req.files['picture_file'] ? req.files['picture_file'][0].path : null

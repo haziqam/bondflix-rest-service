@@ -20,7 +20,7 @@ export function contentRoutes(controller: ContentController): Router {
     /**
      * Update content by id
      */
-    router.put('/:id', admin_jwt_middleware,uploadFile.fields([
+    router.put('/:id', user_jwt_middleware, uploadFile.fields([
         { name: 'content_file', maxCount: 1 },
         { name: 'thumbnail_file', maxCount: 1 }
     ]), (req: Request, res: Response) => {
@@ -30,7 +30,7 @@ export function contentRoutes(controller: ContentController): Router {
     /**
      * Delete content by id
      */
-    router.delete('/:id', admin_jwt_middleware,(req: Request, res: Response) => {
+    router.delete('/:id', user_jwt_middleware, (req: Request, res: Response) => {
         controller.deleteContent(req, res).then(() => {});
     });
 

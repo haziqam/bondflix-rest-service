@@ -46,7 +46,6 @@ export class ContentController {
                 return ResponseUtil.sendError(res, 500, 'Content creation failed', null);
             }
         } catch (error) {
-            console.log(error)
             handle_error(res, error);
         }
     }
@@ -54,6 +53,16 @@ export class ContentController {
     async updateContent(req: Request, res: Response) {
         try {
             const contentId = parseInt(req.params.id, 10);
+            const existingContent = await this.contentService.findContentById(contentId);
+            if (!existingContent) {
+                return ResponseUtil.sendError(res, 404, "Content not found", null);
+            }
+
+            //@ts-ignore
+            if (existingContent.creator_id !== req.userId && !req.isAdmin) {
+                return ResponseUtil.sendError(res, 401, "Unauthorized", null);
+            }
+
             const { ...updatedContent } = UpdateContentSchema.parse(req.body);
             if ('release_date' in updatedContent) {
                 // @ts-ignore
@@ -74,7 +83,6 @@ export class ContentController {
 
             //@ts-ignore
             const success = await this.contentService.updateContent(contentId, updatedContent);
-
             if (success) {
                 return ResponseUtil.sendResponse(res, 200, 'Content updated successfully', null);
             } else {
@@ -88,6 +96,16 @@ export class ContentController {
     async deleteContent(req: Request, res: Response) {
         try {
             const contentId = parseInt(req.params.id, 10);
+            const existingContent = await this.contentService.findContentById(contentId);
+            if (!existingContent) {
+                return ResponseUtil.sendError(res, 404, "Content not found", null);
+            }
+
+            //@ts-ignore
+            if (existingContent.creator_id !== req.userId && !req.isAdmin) {
+                return ResponseUtil.sendError(res, 401, "Unauthorized", null);
+            }
+
             const success = await this.contentService.deleteContent(contentId);
             if (success) {
                 return ResponseUtil.sendResponse(res, 200, 'Content deleted successfully', null);
@@ -95,7 +113,6 @@ export class ContentController {
                 return ResponseUtil.sendError(res, 404, 'Content not found or deletion failed', null);
             }
         } catch (error) {
-            console.log(error)
             handle_error(res, error);
         }
     }

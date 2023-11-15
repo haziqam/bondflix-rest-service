@@ -1,4 +1,4 @@
-import {Sponsor, PrismaClient} from '@prisma/client';
+import {PrismaClient, Sponsor} from '@prisma/client';
 import {SponsorRepository} from '../../../interfaces/repositories/sponsor.repository';
 
 const prisma = new PrismaClient();

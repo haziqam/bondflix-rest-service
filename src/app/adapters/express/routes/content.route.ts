@@ -1,6 +1,5 @@
 import {Request, Response, Router} from 'express';
 import {ContentController} from '../../../application/controllers/content.controller';
-import {admin_jwt_middleware} from "../middlewares/admin_jwt_auth.middleware";
 import {user_jwt_middleware} from "../middlewares/user_jwt_auth.middleware";
 import {uploadFile} from "../../../utils/upload_file.utils";
 

@@ -3,7 +3,6 @@ import {UserRepository} from "../../interfaces/repositories/user.repository";
 import {compareHashedString, hashString} from "../../utils/hash_string.utils";
 import {signJWT} from "../../utils/jwt.utils";
 import {deleteFile} from "../../utils/delete_file.utils";
-import {ResponseUtil} from "../../utils/response.utils";
 
 /**
  * What to do in Services:

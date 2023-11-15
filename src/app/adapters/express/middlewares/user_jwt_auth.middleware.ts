@@ -1,6 +1,6 @@
-import { NextFunction, Request, Response } from "express";
-import { ResponseUtil } from "../../../utils/response.utils";
-import { verifyJWT } from "../../../utils/jwt.utils";
+import {NextFunction, Request, Response} from "express";
+import {ResponseUtil} from "../../../utils/response.utils";
+import {verifyJWT} from "../../../utils/jwt.utils";
 
 export function user_jwt_middleware(
     req: Request,

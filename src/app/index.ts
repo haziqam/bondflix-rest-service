@@ -2,8 +2,8 @@ import express from "express";
 import dotEnv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import { routes } from "./routes";
-import { initContainer } from "./bootstrap";
+import {routes} from "./routes";
+import {initContainer} from "./bootstrap";
 
 const app = express();
 const port = process.env.PORT || 3000;

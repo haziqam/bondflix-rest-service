@@ -1,4 +1,4 @@
-import { createClient, RedisClientType } from 'redis';
+import {createClient, RedisClientType} from 'redis';
 
 export class RedisClient {
     private static instance: RedisClient;

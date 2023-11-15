@@ -1,6 +1,5 @@
-import { NextFunction, Request, Response } from "express";
-import { ResponseUtil } from "../../../utils/response.utils";
-import { verifyJWT } from "../../../utils/jwt.utils";
+import {NextFunction, Request, Response} from "express";
+import {ResponseUtil} from "../../../utils/response.utils";
 import {ContentService} from "../../../application/services/content.service";
 import {SubscriptionService} from "../../../application/services/subscription.service";
 

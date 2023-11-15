@@ -1,4 +1,3 @@
-import {user_jwt_middleware} from "../middlewares/user_jwt_auth.middleware";
 import {Request, Response, Router} from "express";
 import {PublicController} from "../../../application/controllers/public.controller";
 import {uploadFile} from "../../../utils/upload_file.utils";

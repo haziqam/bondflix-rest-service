@@ -16,8 +16,9 @@ export class ContentController {
     }
     async createContent(req: Request, res: Response) {
         try {
-            let { title, creator_id, description } = req.body;
-            creator_id = parseInt(creator_id, 10)
+            let { title, description } = req.body;
+            //@ts-ignore
+            const creator_id = parseInt(req.userId, 10)
             const release_date = new Date(req.body.release_date);
 
             // @ts-ignore

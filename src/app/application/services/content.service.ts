@@ -81,7 +81,15 @@ export class ContentService {
     }
 
     async findContentById(contentId: number): Promise<Content | null> {
-        return this.contentRepository.findById(contentId);
+        const content = await this.contentRepository.findById(contentId);
+        // @ts-ignore
+        if (content.user) {
+            //@ts-ignore
+            const {hashedPassword, ...userWithoutPassword} = content.user;
+            //@ts-ignore
+            return {...content, user: userWithoutPassword};
+        }
+        return content;
     }
 
     async getAllContents(): Promise<Content[] | null> {

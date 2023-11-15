@@ -21,7 +21,13 @@ export class ContentRepositoryPrisma implements ContentRepository {
             throw new Error(`Invalid ID: ${id}`);
         }
 
-        return prisma.content.findUnique({ where: { id: id } });
+        return prisma.content.findUnique({ where: { id: id },
+            include: {
+                user: true,
+                genres: true,
+                categories: true,
+            }
+        });
     }
 
 
@@ -49,25 +55,55 @@ export class ContentRepositoryPrisma implements ContentRepository {
     }
 
     async associateGenres(contentId: number, genres: number[]): Promise<void> {
-        await prisma.content.update({
-            where: { id: contentId },
-            data: {
-                genres: {
-                    connect: genres.map(genreId => ({ id: genreId }))
-                }
+        const validGenreIds = [];
+        for (const genreId of genres) {
+            const genreExists = await prisma.genre.findUnique({ where: { id: genreId } });
+            if (genreExists) {
+                validGenreIds.push(genreId);
+            } else {
+                console.warn(`Genre ID ${genreId} does not exist.`);
             }
-        });
+        }
+
+        if (validGenreIds.length > 0) {
+            await prisma.content.update({
+                where: { id: contentId },
+                data: {
+                    genres: {
+                        connect: validGenreIds.map(id => ({ id }))
+                    }
+                }
+            });
+        } else {
+            throw new Error('No valid genre IDs provided.');
+        }
     }
 
+
     async associateCategories(contentId: number, categories: number[]): Promise<void> {
-        await prisma.content.update({
-            where: { id: contentId },
-            data: {
-                categories: {
-                    connect: categories.map(categoryId => ({ id: categoryId }))
-                }
+        const validCategoryIds = [];
+        for (const categoryId of categories) {
+            const categoryExists = await prisma.category.findUnique({ where: { id: categoryId } });
+            if (categoryExists) {
+                validCategoryIds.push(categoryId);
+            } else {
+                console.warn(`Category ID ${categoryId} does not exist.`);
             }
-        });
+        }
+
+        if (validCategoryIds.length > 0) {
+            await prisma.content.update({
+                where: { id: contentId },
+                data: {
+                    categories: {
+                        connect: validCategoryIds.map(id => ({ id }))
+                    }
+                }
+            });
+        } else {
+            throw new Error('No valid category IDs provided.');
+        }
     }
+
 
 }

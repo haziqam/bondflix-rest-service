@@ -10,7 +10,7 @@ export function contentRoutes(controller: ContentController): Router {
     /**
      * Create content
      */
-    router.post('/', admin_jwt_middleware, uploadFile.fields([
+    router.post('/', user_jwt_middleware, uploadFile.fields([
         { name: 'content_file', maxCount: 1 },
         { name: 'thumbnail_file', maxCount: 1 }
     ]), (req: Request, res: Response) => {
@@ -44,11 +44,9 @@ export function contentRoutes(controller: ContentController): Router {
     /**
      * Get all contents
      */
-    router.get('/', user_jwt_middleware,(req: Request, res: Response) => {
+    router.get('/', (req: Request, res: Response) => {
         controller.getAllContent(req, res).then(()=> {});
     });
-
-    //TODO: Probably need to search based on genre, categories, actors, directors.
 
     return router;
 }

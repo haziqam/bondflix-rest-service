@@ -70,8 +70,19 @@ export class ContentService {
     }
 
     async getAllContents(): Promise<Content[] | null> {
-        return this.contentRepository.findAll();
+        const contents: Content[] | null = await this.contentRepository.findAll();
+        // @ts-ignore
+        if (contents.length === 0) return null;
+        // @ts-ignore
+        return contents.map(content => {
+            //@ts-ignore
+            if (content.user) {
+                //@ts-ignore
+                const {hashedPassword, ...userWithoutPassword} = content.user;
+                return {...content, user: userWithoutPassword};
+            }
+            return content;
+        });
     }
 
-    //methods for content retrieval, listing, filtering, etc.,
 }

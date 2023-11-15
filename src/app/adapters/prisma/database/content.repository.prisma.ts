@@ -13,11 +13,19 @@ export class ContentRepositoryPrisma implements ContentRepository {
     }
 
     async findByTitle(title: string) {
-        return prisma.content.findFirst({ where: { title } });
+        return prisma.content.findFirst({ where: { title },  include: {
+            user: true,
+            genres: true,
+            categories: true,
+        }});
     }
 
     async findById(id: number) {
-        return prisma.content.findUnique({ where: { id } });
+        return prisma.content.findUnique({ where: { id }, include: {
+            user: true,
+            genres: true,
+            categories: true,
+        }});
     }
 
     async update(content: Partial<Content>) {

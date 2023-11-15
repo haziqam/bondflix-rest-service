@@ -202,12 +202,15 @@ export class ContentController {
             const contentData = await this.contentService.findContentByCreatorId(creatorId);
             if (contentData) {
                 //@ts-ignore
+                if (req.userId == creatorId) {
+                    return ResponseUtil.sendResponse(res, 200, "Successfully get content", contentData);
+                }
+                //@ts-ignore
                 const success = await this.subscriptionService.isUserSubscribedToCreator(req.userId, creatorId);
                 // @ts-ignore
                 if (!success || success == "false" || success == false) {
                     return ResponseUtil.sendError(res, 401, "Unauthorized - Subscription required", null);
                 } else {
-                    //@ts-ignore
                     return ResponseUtil.sendResponse(res, 200, "Successfully get content", contentData);
                 }
             } else {

@@ -10,7 +10,7 @@ export function serve_file(req: Request, res: Response, next: NextFunction) {
         return ResponseUtil.sendError(res, 404, "File path not found", null);
     }
 
-    const fullFilePath = path.join(__dirname, '..', filePath);
+    const fullFilePath = path.join(__dirname, '..', '..', '..', '..', filePath);
 
     if (fs.existsSync(fullFilePath)) {
         res.sendFile(fullFilePath);

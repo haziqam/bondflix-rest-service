@@ -10,7 +10,7 @@ export function contentRoutes(controller: ContentController): Router {
     /**
      * Create content
      */
-    router.post('/', admin_jwt_middleware, uploadFile.fields([
+    router.post('/', user_jwt_middleware, uploadFile.fields([
         { name: 'content_file', maxCount: 1 },
         { name: 'thumbnail_file', maxCount: 1 }
     ]), (req: Request, res: Response) => {

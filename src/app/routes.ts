@@ -1,4 +1,4 @@
-import express, {Express, NextFunction, Request, Response} from "express";
+import {Express, NextFunction, Request, Response} from "express";
 import {userRoutes} from "./adapters/express/routes/users.route";
 import {authRoutes} from "./adapters/express/routes/auth.route";
 import healthRoutes from "./adapters/express/routes/health.route";
@@ -17,7 +17,6 @@ import {SubscriptionController} from "./application/controllers/subscription.con
 import {subscriptionRoutes} from "./adapters/express/routes/subscription.route";
 import {PublicController} from "./application/controllers/public.controller";
 import {publicRoutes} from "./adapters/express/routes/public.route";
-import path from "path";
 import {access_content_middleware} from "./adapters/express/middlewares/access_content.middleware";
 import {serve_file} from "./adapters/express/middlewares/serve_file.middleware";
 import {access_thumbnail_middleware} from "./adapters/express/middlewares/access_thumbnail.middleware";

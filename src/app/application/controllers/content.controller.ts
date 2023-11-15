@@ -6,7 +6,6 @@ import {UpdateContentSchema} from "../../schema/content/update_content.schema";
 import {UserService} from "../services/user.service";
 import {handle_error} from "../../utils/handle_error.utils";
 import {RedisClient} from "../../adapters/redis/redis.client";
-import {deleteFile} from "../../utils/delete_file.utils";
 
 export class ContentController {
     private contentService: ContentService;
@@ -125,6 +124,7 @@ export class ContentController {
             let allContent;
             if (allContentString == null) {
                 allContent = await this.contentService.getAllContents();
+
                 allContentString = JSON.stringify(allContent);
                 await redisClient.set("allContent", allContentString, 30);
             } else {

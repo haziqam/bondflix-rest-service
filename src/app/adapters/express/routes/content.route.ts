@@ -44,11 +44,9 @@ export function contentRoutes(controller: ContentController): Router {
     /**
      * Get all contents
      */
-    router.get('/', user_jwt_middleware,(req: Request, res: Response) => {
+    router.get('/', (req: Request, res: Response) => {
         controller.getAllContent(req, res).then(()=> {});
     });
-
-    //TODO: Probably need to search based on genre, categories, actors, directors.
 
     return router;
 }

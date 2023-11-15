@@ -1,4 +1,4 @@
-import {Express, NextFunction, Request, Response} from "express";
+import express, {Express, NextFunction, Request, Response} from "express";
 import {userRoutes} from "./adapters/express/routes/users.route";
 import {authRoutes} from "./adapters/express/routes/auth.route";
 import healthRoutes from "./adapters/express/routes/health.route";
@@ -17,6 +17,7 @@ import {SubscriptionController} from "./application/controllers/subscription.con
 import {subscriptionRoutes} from "./adapters/express/routes/subscription.route";
 import {PublicController} from "./application/controllers/public.controller";
 import {publicRoutes} from "./adapters/express/routes/public.route";
+import path from "path";
 
 export function routes(app: Express, container: ServiceContainer){
     const userController = new UserController(container.getUserService());
@@ -36,6 +37,7 @@ export function routes(app: Express, container: ServiceContainer){
     app.use('/api/v1/sponsors', sponsorRoutes(sponsorController));
     app.use('/api/v1/subscriptions', subscriptionRoutes(subscriptionController));
     app.use('/api/v1/public', publicRoutes(publicController));
+    app.use('/static', express.static(path.join(__dirname, '..', 'uploads')));
 
     /**
      * Handling errors and not found routes

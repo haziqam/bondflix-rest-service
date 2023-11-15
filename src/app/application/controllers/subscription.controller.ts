@@ -21,8 +21,8 @@ export class SubscriptionController {
             if (!userId) {
                 return ResponseUtil.sendError(res, 401, "Unauthorized", null);
             }
-            const success = await this.subscriptionService.subscribe(userId, creatorId);
-            if (success) {
+            const isSubscribed = await this.subscriptionService.subscribe(userId, creatorId);
+            if (isSubscribed) {
                 return ResponseUtil.sendResponse(res, 200, "Subscription success", null);
             } else {
                 return ResponseUtil.sendError(res, 500, "Subscription request failed", null);
@@ -50,6 +50,27 @@ export class SubscriptionController {
 
         } catch (error) {
             handle_error(res, error)
+        }
+    }
+
+    async isSubscribed(req: Request, res: Response) {
+        try {
+            const creatorId = parseInt(req.params.creatorId, 10);
+            if (!creatorId){
+                return ResponseUtil.sendError(res, 401, "Creator ID can't be empty", null);
+            }
+
+            //@ts-ignore
+            const isSubscribed = await this.subscriptionService.isUserSubscribedToCreator(req.userId, creatorId)
+            // @ts-ignore
+            if (!isSubscribed || isSubscribed == "false" || isSubscribed == false) {
+                return ResponseUtil.sendResponse(res, 200, "User is not subscribed", false)
+            } else {
+                return ResponseUtil.sendError(res, 404, "User subscribed", true);
+            }
+
+        } catch (error) {
+            handle_error(res, error);
         }
     }
 }

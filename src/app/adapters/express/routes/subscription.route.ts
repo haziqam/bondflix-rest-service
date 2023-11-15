@@ -14,5 +14,9 @@ export function subscriptionRoutes(controller: SubscriptionController): Router {
         controller.getSubscriber(req, res).then(() => {})
     })
 
+    router.get("/is_subscribed/:creatorId", user_jwt_middleware, (req: Request, res: Response) => {
+        controller.isSubscribed(req, res).then(() => {})
+    })
+
     return router;
 }

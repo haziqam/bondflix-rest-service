@@ -5,6 +5,7 @@ import {UpdateContentSchema} from "../../schema/content/update_content.schema";
 import {UserService} from "../services/user.service";
 import {handle_error} from "../../utils/handle_error.utils";
 import {RedisClient} from "../../adapters/redis/redis.client";
+import {parseToArray} from "../../utils/parse_array.utils";
 
 export class ContentController {
     private contentService: ContentService;
@@ -16,10 +17,13 @@ export class ContentController {
     }
     async createContent(req: Request, res: Response) {
         try {
-            let { title, description } = req.body;
+            let { title, description, genres, categories } = req.body;
             //@ts-ignore
             const creator_id = parseInt(req.userId, 10)
             const release_date = new Date(req.body.release_date);
+
+            genres = typeof genres === 'string' ? parseToArray(genres) : [];
+            categories = typeof categories === 'string' ? parseToArray(categories) : [];
 
             // @ts-ignore
             const contentFilePath = req.files['content_file'] ? req.files['content_file'][0].path : null;
@@ -41,6 +45,7 @@ export class ContentController {
             );
 
             if (createdContent) {
+                await this.contentService.addGenresAndCategories(createdContent.id, genres, categories);
                 return ResponseUtil.sendResponse(res, 201, 'Content created successfully', createdContent);
             } else {
                 return ResponseUtil.sendError(res, 500, 'Content creation failed', null);

@@ -4,8 +4,8 @@ import {ContentRepository} from '../../../interfaces/repositories/content.reposi
 const prisma = new PrismaClient();
 
 export class ContentRepositoryPrisma implements ContentRepository {
-    async create(content: Content) {
-        await prisma.content.create({ data: content });
+    async create(content: Content): Promise<Content> {
+        return prisma.content.create({data: content});
     }
 
     async delete(id: number) {
@@ -17,8 +17,13 @@ export class ContentRepositoryPrisma implements ContentRepository {
     }
 
     async findById(id: number) {
-        return prisma.content.findUnique({ where: { id } });
+        if (typeof id !== 'number' || isNaN(id)) {
+            throw new Error(`Invalid ID: ${id}`);
+        }
+
+        return prisma.content.findUnique({ where: { id: id } });
     }
+
 
     async update(content: Partial<Content>) {
         const contentId = content.id;
@@ -42,4 +47,27 @@ export class ContentRepositoryPrisma implements ContentRepository {
             }
         });
     }
+
+    async associateGenres(contentId: number, genres: number[]): Promise<void> {
+        await prisma.content.update({
+            where: { id: contentId },
+            data: {
+                genres: {
+                    connect: genres.map(genreId => ({ id: genreId }))
+                }
+            }
+        });
+    }
+
+    async associateCategories(contentId: number, categories: number[]): Promise<void> {
+        await prisma.content.update({
+            where: { id: contentId },
+            data: {
+                categories: {
+                    connect: categories.map(categoryId => ({ id: categoryId }))
+                }
+            }
+        });
+    }
+
 }

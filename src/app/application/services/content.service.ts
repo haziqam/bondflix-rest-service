@@ -28,8 +28,7 @@ export class ContentService {
             uploaded_at: new Date(),
         };
 
-        await this.contentRepository.create(newContent);
-        return newContent;
+        return await this.contentRepository.create(newContent);
     }
 
     async updateContent(contentId: number, updatedContent: Partial<Content>): Promise<boolean> {
@@ -49,6 +48,22 @@ export class ContentService {
         await this.contentRepository.update(updatedContent);
         return true;
     }
+
+    async addGenresAndCategories(contentId: number, genres: number[], categories: number[]): Promise<boolean> {
+        const existingContent = await this.contentRepository.findById(contentId);
+        if (!existingContent) {
+            return false;
+        }
+        try {
+            await this.contentRepository.associateGenres(contentId, genres);
+            await this.contentRepository.associateCategories(contentId, categories);
+            return true;
+        } catch (error) {
+            console.error('Error associating genres and categories:', error);
+            return false;
+        }
+    }
+
 
     async deleteContent(contentId: number): Promise<boolean> {
         const existingContent = await this.contentRepository.findById(contentId);

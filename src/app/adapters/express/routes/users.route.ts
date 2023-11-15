@@ -6,6 +6,7 @@ import {user_jwt_middleware} from "../middlewares/user_jwt_auth.middleware";
 
 export function userRoutes(controller: UserController): Router {
     const router = Router();
+
     /**
      * Get all user and username query
      */

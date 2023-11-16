@@ -177,7 +177,12 @@ export class UserController {
                     sameSite: "strict",
                 });
 
+
+
                 const decoded = verifyJWT(token);
+                //@ts-ignore
+                res.cookie("userId", decoded.payload.userId)
+
                 if (decoded) {
                     return ResponseUtil.sendResponse(
                         res,

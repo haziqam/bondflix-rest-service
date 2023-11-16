@@ -7,6 +7,7 @@ import {CreateUserSchema} from "../../schema/user/create_user.schema";
 import {UpdateUserSchema} from "../../schema/user/update_user.schema";
 import {handle_error} from "../../utils/handle_error.utils";
 import {verifyJWT} from "../../utils/jwt.utils";
+import {SoapClient} from "../../adapters/soap/soap.client";
 
 const JWT_COOKIE_MAX_AGE = 1800000;
 
@@ -99,13 +100,27 @@ export class UserController {
     async updateUser(req: Request, res: Response) {
         try {
             const userId = parseInt(req.params.id, 10);
+            //@ts-ignore
+            if (userId !== req.userId && !req.isAdmin){
+                return ResponseUtil.sendError(res, 401, "Unauthorized", null)
+            }
+
             const { ...updatedUser } = UpdateUserSchema.parse(req.body);
+
+            let updateProfilePicture = false
             // @ts-ignore
-            updatedUser.pp_url = req.files['picture_file'] ? req.files['picture_file'][0].path : null
+            if (req.files["picture_file"]) {
+                // @ts-ignore
+                updatedUser.pp_url =  req.files['picture_file'][0].path
+                updateProfilePicture = true
+            }
+
             const success = await this.userService.updateUser(
                 userId,
-                updatedUser
+                updatedUser,
+                updateProfilePicture
             );
+           
             if (success) {
                 return ResponseUtil.sendResponse(
                     res,
@@ -117,6 +132,7 @@ export class UserController {
                 return ResponseUtil.sendError(res, 404, "User not found", null);
             }
         } catch (error) {
+            console.log(error)
             handle_error(res, error);
         }
     }
@@ -143,6 +159,11 @@ export class UserController {
         try {
             const id = parseInt(req.params.id, 10);
             const user = await this.userService.findUserById(id);
+            //@ts-ignore
+            if (id !== req.userId && !req.isAdmin){
+                return ResponseUtil.sendError(res, 401, "Unauthorized", null)
+            }
+
             if (user) {
                 return ResponseUtil.sendResponse(
                     res,
@@ -155,6 +176,30 @@ export class UserController {
             }
         } catch (error) {
             handle_error(res, error);
+        }
+    }
+
+    async getUserByName(req: Request, res: Response) {
+        try {
+            const name = req.query.name;
+
+            let usersByName;
+            if (name !== undefined) {
+                //@ts-ignore
+                usersByName = await this.userService.findUserByName(name);
+            }
+            if (usersByName) {
+                return ResponseUtil.sendResponse(
+                    res,
+                    200,
+                    "Users retrieved successfully",
+                    usersByName
+                );
+            } else {
+                return ResponseUtil.sendError(res, 404, "Users not found", null);
+            }
+        } catch (error) {
+            handle_error(res, error)
         }
     }
 
@@ -171,12 +216,28 @@ export class UserController {
                     httpOnly: true,
                     sameSite: "strict",
                 });
-                return ResponseUtil.sendResponse(
-                    res,
-                    200,
-                    "Login successful",
-                    null
-                );
+
+                const decoded = verifyJWT(token);
+                //@ts-ignore
+                res.cookie("userId", decoded.payload.userId, {
+                    maxAge: JWT_COOKIE_MAX_AGE,
+                })
+
+                if (decoded) {
+                    return ResponseUtil.sendResponse(
+                        res,
+                        200,
+                        "Login successful",
+                        decoded.payload
+                    );
+                } else {
+                    return ResponseUtil.sendError(
+                        res,
+                        404,
+                        "Authentication failed",
+                        null
+                    );
+                }
             } else {
                 return ResponseUtil.sendError(
                     res,
@@ -192,9 +253,7 @@ export class UserController {
 
     async signup(req: Request, res: Response) {
         try {
-            const { username, name, email, password } = RegisterSchema.parse(
-                req.body
-            );
+            const { username, name, email, password } = RegisterSchema.parse(req.body);
             const success = await this.userService.createUser(
                 username,
                 name,
@@ -225,6 +284,7 @@ export class UserController {
     async logout(req: Request, res: Response) {
         try {
             res.clearCookie("bondflix-auth-jwt");
+            res.clearCookie("userId");
             return ResponseUtil.sendResponse(
                 res,
                 200,
@@ -246,7 +306,6 @@ export class UserController {
 
             const decoded = verifyJWT(token);
 
-            //TODO: extract to a function
             if (decoded.payload) {
                 // @ts-ignore
                 const { userId, username, name, expiresIn, issuedAt, isAdmin } =
@@ -273,5 +332,27 @@ export class UserController {
         } catch (error) {
             handle_error(res, error);
         }
+    }
+
+    async getSubscriptionEmail(req: Request, res: Response) {
+        try {
+            const creatorId = parseInt(req.params.creatorId, 10)
+            const data = await SoapClient.getInstance().getAllSubscriberFromCreator(
+                creatorId
+            );
+
+            const emails = await Promise.all(Object.values(data).map(async (id) => {
+                return await this.getEmailById(parseInt(id, 10));
+            }));
+
+            return ResponseUtil.sendResponse(res, 200, "Ok", emails);
+        } catch (error) {
+            handle_error(res, error);
+        }
+    }
+
+    async getEmailById(id: number) {
+        const user = await this.userService.findUserById(id);
+        return user?.email;
     }
 }

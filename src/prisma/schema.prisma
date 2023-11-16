@@ -30,7 +30,7 @@ model Content {
   creator_id          Int
   title               String
   description         String
-  release_date        DateTime
+  visibility          Boolean
   content_file_path   String
   thumbnail_file_path String
   uploaded_at         DateTime

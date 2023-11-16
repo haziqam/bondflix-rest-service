@@ -1,4 +1,4 @@
-import {Sponsor, PrismaClient} from '@prisma/client';
+import {PrismaClient, Sponsor} from '@prisma/client';
 import {SponsorRepository} from '../../../interfaces/repositories/sponsor.repository';
 
 const prisma = new PrismaClient();
@@ -20,7 +20,7 @@ export class SponsorRepositoryPrisma implements SponsorRepository {
     }
 
     async findById(id: number) {
-        return prisma.sponsor.findUnique({ where: { id } });
+        return prisma.sponsor.findFirst({ where: { id } });
     }
 
     async findByName(name: string) {

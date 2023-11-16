@@ -5,6 +5,7 @@ import {CreateSponsorSchema} from "../../schema/sponsor/create_sponsor.schema";
 import {UpdateSponsorSchema} from "../../schema/sponsor/update_sponsor.schema";
 import {SearchSponsorByNameSchema} from "../../schema/sponsor/search_sponsor_by_name.schema";
 import {handle_error} from "../../utils/handle_error.utils";
+import {RedisClient} from "../../adapters/redis/redis.client";
 
 export class SponsorController {
     private sponsorService: SponsorService;
@@ -97,9 +98,20 @@ export class SponsorController {
 
     async getAllSponsor(req: Request, res: Response) {
         try {
-            const allSponsor = await this.sponsorService.getAllSponsors();
+            const redisClient = RedisClient.getInstance();
+            let allSponsorString = await redisClient.get("allSponsor");
 
-            if (allSponsor && allSponsor.length > 0) {
+            let allSponsor;
+            if (allSponsorString == null) {
+                allSponsor = await this.sponsorService.getAllSponsors();
+
+                allSponsorString = JSON.stringify(allSponsor);
+                await redisClient.set("allSponsor", allSponsorString, 300);
+            } else {
+                allSponsor = JSON.parse(allSponsorString);
+            }
+
+            if (allSponsor) {
                 return ResponseUtil.sendResponse(res, 200, 'Success', allSponsor);
             } else {
                 return ResponseUtil.sendResponse(res, 404, 'No sponsor found', null);

@@ -5,6 +5,7 @@ import {CreateGenreSchema} from "../../schema/genre/create_genre.schema";
 import {UpdateGenreSchema} from "../../schema/genre/update_genre.schema";
 import {SearchGenreByNameSchema} from "../../schema/genre/search_genre_by_name.schema";
 import {handle_error} from "../../utils/handle_error.utils";
+import {RedisClient} from "../../adapters/redis/redis.client";
 
 export class GenreController {
     private genreService: GenreService;
@@ -97,7 +98,20 @@ export class GenreController {
 
     async getAllGenre(req: Request, res: Response) {
         try {
-            const allGenre = await this.genreService.getAllGenres();
+            const redisClient = RedisClient.getInstance();
+            let allGenreString = await redisClient.get("allGenre");
+
+            let allGenre;
+            if (allGenreString == null) {
+                allGenre = await this.genreService.getAllGenres();
+
+                if (allGenre && allGenre.length > 0) {
+                    allGenreString = JSON.stringify(allGenre);
+                    await redisClient.set("allGenre", allGenreString, 300);
+                }
+            } else {
+                allGenre = JSON.parse(allGenreString);
+            }
 
             if (allGenre && allGenre.length > 0) {
                 return ResponseUtil.sendResponse(res, 200, 'Success', allGenre);
@@ -108,5 +122,6 @@ export class GenreController {
             handle_error(res, error);
         }
     }
+
 
 }

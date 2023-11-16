@@ -1,6 +1,6 @@
-import { NextFunction, Request, Response } from "express";
-import { ResponseUtil } from "../../../utils/response.utils";
-import { verifyJWT } from "../../../utils/jwt.utils";
+import {NextFunction, Request, Response} from "express";
+import {ResponseUtil} from "../../../utils/response.utils";
+import {verifyJWT} from "../../../utils/jwt.utils";
 import {ContentService} from "../../../application/services/content.service";
 import {SubscriptionService} from "../../../application/services/subscription.service";
 
@@ -53,7 +53,8 @@ export function access_content_middleware(contentService: ContentService, subscr
             //Check subscribed or not
             //@ts-ignore
             req.filePath = contentData?.content_file_path;
-            console.log(contentData)
+            //@ts-ignore
+            req.fileType = "content";
 
             //@ts-ignore
             if (creatorId === req.userId){

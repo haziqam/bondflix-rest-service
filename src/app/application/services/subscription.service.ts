@@ -1,5 +1,5 @@
-import { UserRepository } from "../../interfaces/repositories/user.repository";
-import { SoapClient } from "../../adapters/soap/soap.client";
+import {UserRepository} from "../../interfaces/repositories/user.repository";
+import {SoapClient} from "../../adapters/soap/soap.client";
 
 export class SubscriptionService {
     private userRepository: UserRepository;

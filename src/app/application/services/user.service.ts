@@ -41,6 +41,16 @@ export class UserService {
         return signJWT(jwtClaims, "3h");
     }
     async createUser(username: string, name: string, email: string, password: string, isAdmin: boolean): Promise<boolean> {
+        const existingUserUsername = await this.userRepository.findUserByIdentifier(username)
+        if (existingUserUsername){
+            throw Error("Username has been used")
+        }
+
+        const existingUserEmail = await this.userRepository.findUserByIdentifier(email);
+        if (existingUserEmail){
+            throw Error("Email has been used")
+        }
+
         const hashedPassword = await hashString(password);
         if (hashedPassword) {
             //@ts-ignore
@@ -70,14 +80,15 @@ export class UserService {
          return true;
     }
 
-    async updateUser(id: number, updatedUser: Partial<User>): Promise<boolean> {
+    async updateUser(id: number, updatedUser: Partial<User>, updateProfilePicture: boolean): Promise<boolean> {
+        console.log(id)
         const existingUser = await this.userRepository.findById(id);
         if (!existingUser) {
             return false;
         }
 
         // Kalo udah ada filenya apus, terus upload yang baru
-        if (existingUser.pp_url !== "default.png") {
+        if (updateProfilePicture && existingUser.pp_url !== "default.png") {
             await deleteFile(existingUser.pp_url)
         }
 
@@ -117,5 +128,9 @@ export class UserService {
 
     async getAllUsers(): Promise<User[] | null> {
         return this.userRepository.findAll();
+    }
+
+    async findUserByName(name: string): Promise<User[] | null> {
+        return await this.userRepository.findUserByName(name);
     }
 }

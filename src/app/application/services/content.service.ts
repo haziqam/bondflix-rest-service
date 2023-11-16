@@ -13,7 +13,7 @@ export class ContentService {
         title: string,
         creator_id: number,
         description: string,
-        releaseDate: Date,
+        visibility: boolean,
         contentFilePath: string,
         thumbnailFilePath: string
     ): Promise<Content | null> {
@@ -22,14 +22,13 @@ export class ContentService {
             title: title,
             creator_id: creator_id,
             description: description,
-            release_date: releaseDate,
+            visibility: visibility,
             content_file_path: contentFilePath,
             thumbnail_file_path: thumbnailFilePath,
             uploaded_at: new Date(),
         };
 
-        await this.contentRepository.create(newContent);
-        return newContent;
+        return await this.contentRepository.create(newContent);
     }
 
     async updateContent(contentId: number, updatedContent: Partial<Content>): Promise<boolean> {
@@ -39,9 +38,7 @@ export class ContentService {
         }
 
         if (existingContent.content_file_path !== null && existingContent.thumbnail_file_path !== null) {
-            // @ts-ignore
             await deleteFile(existingContent.content_file_path)
-            // @ts-ignore
             await deleteFile(existingContent.thumbnail_file_path)
         }
 
@@ -49,6 +46,27 @@ export class ContentService {
         await this.contentRepository.update(updatedContent);
         return true;
     }
+
+    async findContentsByTitle(title: string) {
+        return await this.contentRepository.findByTitle(title);
+    }
+
+    async addAssociation(contentId: number, genres: number[], categories: number[], sponsors: number[]): Promise<boolean> {
+        const existingContent = await this.contentRepository.findById(contentId);
+        if (!existingContent) {
+            return false;
+        }
+        try {
+            await this.contentRepository.associateGenres(contentId, genres);
+            await this.contentRepository.associateCategories(contentId, categories);
+            await this.contentRepository.associateSponsors(contentId, sponsors);
+            return true;
+        } catch (error) {
+            console.error('Error associating genres and categories:', error);
+            return false;
+        }
+    }
+
 
     async deleteContent(contentId: number): Promise<boolean> {
         const existingContent = await this.contentRepository.findById(contentId);
@@ -66,7 +84,19 @@ export class ContentService {
     }
 
     async findContentById(contentId: number): Promise<Content | null> {
-        return this.contentRepository.findById(contentId);
+        const content = await this.contentRepository.findById(contentId);
+        // @ts-ignore
+        if (content.user) {
+            //@ts-ignore
+            const {hashedPassword, ...userWithoutPassword} = content.user;
+            //@ts-ignore
+            return {...content, user: userWithoutPassword};
+        }
+        return content;
+    }
+
+    async findContentByCreatorId(creatorId: number) : Promise<Content[] | null> {
+        return await this.contentRepository.findContentByCreatorId(creatorId);
     }
 
     async getAllContents(): Promise<Content[] | null> {

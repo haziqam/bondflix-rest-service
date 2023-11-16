@@ -209,7 +209,9 @@ export class UserController {
 
                 const decoded = verifyJWT(token);
                 //@ts-ignore
-                res.cookie("userId", decoded.payload.userId)
+                res.cookie("userId", decoded.payload.userId, {
+                    maxAge: JWT_COOKIE_MAX_AGE,
+                })
 
                 if (decoded) {
                     return ResponseUtil.sendResponse(
@@ -272,6 +274,7 @@ export class UserController {
     async logout(req: Request, res: Response) {
         try {
             res.clearCookie("bondflix-auth-jwt");
+            res.clearCookie("userId");
             return ResponseUtil.sendResponse(
                 res,
                 200,

@@ -5,5 +5,3 @@ docker.env
 src/.env
 *.key
 node_modules
-src/uploads
-*.jpg

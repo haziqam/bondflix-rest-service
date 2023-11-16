@@ -15,6 +15,8 @@ export function access_thumbnail_middleware(contentService: ContentService, subs
             const contentData = await contentService.findContentById(contentId);
             //@ts-ignore
             req.filePath = contentData?.thumbnail_file_path;
+            //@ts-ignore
+            req.fileType = "thumbnail";
             next();
 
         } catch (error) {

@@ -53,7 +53,8 @@ export function access_content_middleware(contentService: ContentService, subscr
             //Check subscribed or not
             //@ts-ignore
             req.filePath = contentData?.content_file_path;
-            console.log(contentData)
+            //@ts-ignore
+            req.fileType = "content";
 
             //@ts-ignore
             if (creatorId === req.userId){

@@ -1,5 +1,3 @@
-import {ContentService} from "../../../application/services/content.service";
-import {SubscriptionService} from "../../../application/services/subscription.service";
 import {NextFunction, Request, Response} from "express";
 import {ResponseUtil} from "../../../utils/response.utils";
 import {UserService} from "../../../application/services/user.service";
@@ -16,6 +14,8 @@ export function access_picture_middleware(userService: UserService) {
             const userData = await userService.findUserById(userId);
             //@ts-ignore
             req.filePath = userData?.pp_url;
+            //@ts-ignore
+            req.fileType = "picture";
             next();
 
         } catch (error) {

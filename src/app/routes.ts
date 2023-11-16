@@ -1,7 +1,6 @@
 import {Express, NextFunction, Request, Response} from "express";
 import {userRoutes} from "./adapters/express/routes/users.route";
 import {authRoutes} from "./adapters/express/routes/auth.route";
-import healthRoutes from "./adapters/express/routes/health.route";
 import {UserController} from "./application/controllers/user.controller";
 import {ServiceContainer} from "./containers/service.container";
 import {ContentController} from "./application/controllers/content.controller";
@@ -15,8 +14,6 @@ import {categoryRoutes} from "./adapters/express/routes/category.route";
 import {sponsorRoutes} from "./adapters/express/routes/sponsor.route";
 import {SubscriptionController} from "./application/controllers/subscription.controller";
 import {subscriptionRoutes} from "./adapters/express/routes/subscription.route";
-import {PublicController} from "./application/controllers/public.controller";
-import {publicRoutes} from "./adapters/express/routes/public.route";
 import {access_content_middleware} from "./adapters/express/middlewares/access_content.middleware";
 import {serve_file} from "./adapters/express/middlewares/serve_file.middleware";
 import {access_thumbnail_middleware} from "./adapters/express/middlewares/access_thumbnail.middleware";
@@ -29,9 +26,7 @@ export function routes(app: Express, container: ServiceContainer){
     const categoryController = new CategoryController(container.getCategoryService());
     const sponsorController = new SponsorController(container.getSponsorService());
     const subscriptionController = new SubscriptionController(container.getSubscriptionService());
-    const publicController = new PublicController();
 
-    app.use('/api/v1/health', healthRoutes);
     app.use('/api/v1/users', userRoutes(userController));
     app.use('/api/v1/auth', authRoutes(userController));
     app.use('/api/v1/contents', contentRoutes(contentController));
@@ -39,7 +34,6 @@ export function routes(app: Express, container: ServiceContainer){
     app.use('/api/v1/categories', categoryRoutes(categoryController));
     app.use('/api/v1/sponsors', sponsorRoutes(sponsorController));
     app.use('/api/v1/subscriptions', subscriptionRoutes(subscriptionController));
-    app.use('/api/v1/public', publicRoutes(publicController, container.getContentService(), container.getSubscriptionService()));
     app.use('/static/thumbnails', access_thumbnail_middleware(container.getContentService(), container.getSubscriptionService()), serve_file);
     app.use('/static/pictures', access_picture_middleware(container.getUserService()), serve_file);
     app.use('/static/contents', access_content_middleware(container.getContentService(), container.getSubscriptionService()), serve_file);

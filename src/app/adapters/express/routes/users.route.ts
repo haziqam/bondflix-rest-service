@@ -14,6 +14,10 @@ export function userRoutes(controller: UserController): Router {
         controller.getUsers(req, res).then(() => {});
     })
 
+    router.get('/search', user_jwt_middleware, (req: Request, res: Response) => {
+        controller.getUserByName(req, res).then(() => {});
+    })
+
     /**
      * Get user by ID
      */

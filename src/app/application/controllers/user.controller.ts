@@ -163,6 +163,30 @@ export class UserController {
         }
     }
 
+    async getUserByName(req: Request, res: Response) {
+        try {
+            const name = req.query.name;
+
+            let usersByName;
+            if (name !== undefined) {
+                //@ts-ignore
+                usersByName = await this.userService.findUserByName(name);
+            }
+            if (usersByName) {
+                return ResponseUtil.sendResponse(
+                    res,
+                    200,
+                    "Users retrieved successfully",
+                    usersByName
+                );
+            } else {
+                return ResponseUtil.sendError(res, 404, "Users not found", null);
+            }
+        } catch (error) {
+            handle_error(res, error)
+        }
+    }
+
     async login(req: Request, res: Response) {
         try {
             const { identifier, password } = LoginSchema.parse(req.body);

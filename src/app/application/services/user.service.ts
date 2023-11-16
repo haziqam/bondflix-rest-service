@@ -128,4 +128,8 @@ export class UserService {
     async getAllUsers(): Promise<User[] | null> {
         return this.userRepository.findAll();
     }
+
+    async findUserByName(name: string): Promise<User[] | null> {
+        return await this.userRepository.findUserByName(name);
+    }
 }

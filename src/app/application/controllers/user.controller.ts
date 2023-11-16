@@ -7,6 +7,7 @@ import {CreateUserSchema} from "../../schema/user/create_user.schema";
 import {UpdateUserSchema} from "../../schema/user/update_user.schema";
 import {handle_error} from "../../utils/handle_error.utils";
 import {verifyJWT} from "../../utils/jwt.utils";
+import {SoapClient} from "../../adapters/soap/soap.client";
 
 const JWT_COOKIE_MAX_AGE = 1800000;
 
@@ -287,7 +288,6 @@ export class UserController {
 
             const decoded = verifyJWT(token);
 
-            //TODO: extract to a function
             if (decoded.payload) {
                 // @ts-ignore
                 const { userId, username, name, expiresIn, issuedAt, isAdmin } =
@@ -314,5 +314,27 @@ export class UserController {
         } catch (error) {
             handle_error(res, error);
         }
+    }
+
+    async getSubscriptionEmail(req: Request, res: Response) {
+        try {
+            const creatorId = parseInt(req.params.creatorId, 10)
+            const data = await SoapClient.getInstance().getAllSubscriberFromCreator(
+                creatorId
+            );
+
+            const emails = await Promise.all(Object.values(data).map(async (id) => {
+                return await this.getEmailById(parseInt(id, 10));
+            }));
+
+            return ResponseUtil.sendResponse(res, 200, "Ok", emails);
+        } catch (error) {
+            handle_error(res, error);
+        }
+    }
+
+    async getEmailById(id: number) {
+        const user = await this.userService.findUserById(id);
+        return user?.email;
     }
 }

@@ -27,6 +27,7 @@ Endpoint API dapat dilihat pada link ini: https://documenter.getpostman.com/view
 
 
 ## Penggunaan Redis sebagai Tembolok (Read Through)
+Jika gambar tidak bisa dibuka, lihat di folder asset dan nama file Redis-Simple-UseCase.png
 ![Redis](/asset/Redis-Simple-UseCase.png)
 
 ## Cara Menginstall dan Menjalankan Program - How to Install and Run The Program
@@ -50,6 +51,3 @@ mv .env.example .env && mv docker.env.example docker.env
 ```sh
 docker-compose up -d --build
 ```
-
-## Redis Use Case
-![Redis Use Case](asset/Redis-Simple-UseCase.png)  

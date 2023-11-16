@@ -1,9 +1,10 @@
-import {NextFunction, Request, Response} from "express";
-import {ResponseUtil} from "../../../utils/response.utils";
 import {ContentService} from "../../../application/services/content.service";
 import {SubscriptionService} from "../../../application/services/subscription.service";
+import {NextFunction, Request, Response} from "express";
+import {ResponseUtil} from "../../../utils/response.utils";
+import {UserService} from "../../../application/services/user.service";
 
-export function access_thumbnail_middleware(contentService: ContentService, subscriptionService: SubscriptionService) {
+export function access_picture_middleware(userService: UserService) {
     return async (req: Request, res: Response, next: NextFunction) => {
         try {
             if (!req.query.id) {
@@ -11,10 +12,10 @@ export function access_thumbnail_middleware(contentService: ContentService, subs
             }
 
             //@ts-ignore
-            const contentId = parseInt(req.query.id, 10);
-            const contentData = await contentService.findContentById(contentId);
+            const userId = parseInt(req.query.id, 10);
+            const userData = await userService.findUserById(userId);
             //@ts-ignore
-            req.filePath = contentData?.thumbnail_file_path;
+            req.filePath = userData?.pp_url;
             next();
 
         } catch (error) {
@@ -23,4 +24,3 @@ export function access_thumbnail_middleware(contentService: ContentService, subs
         }
     };
 }
-

@@ -34,11 +34,6 @@ export function access_content_middleware(contentService: ContentService, subscr
             req.isAdmin = isAdmin;
 
 
-            //@ts-ignore
-            if (req.isAdmin) {
-                return next();
-            }
-
             if (!req.query.id) {
                 return ResponseUtil.sendError(res, 401, "Unauthorized", null);
             }
@@ -57,7 +52,7 @@ export function access_content_middleware(contentService: ContentService, subscr
             req.fileType = "content";
 
             //@ts-ignore
-            if (creatorId === req.userId){
+            if (creatorId === req.userId || req.isAdmin){
                 return next();
             }
 

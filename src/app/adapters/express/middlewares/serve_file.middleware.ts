@@ -12,7 +12,7 @@ export function serve_file(req: Request, res: Response, next: NextFunction) {
         const defaultFiles = {
             content: 'uploads/contents/default.mp4',
             thumbnail: 'uploads/thumbnails/default.png',
-            pictures: 'uploads/pictures/default.png'
+            picture: 'uploads/pictures/default.png'
         };
 
         //@ts-ignore

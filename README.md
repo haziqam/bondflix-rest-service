@@ -1,5 +1,34 @@
 # Bondflix REST Service
 
+## Deskripsi Singkat
+Bondflix REST Service adalah sebuah server yang menyediakan layanan RESTful API untuk SOAP Client, SPA Client, dan PHP Client.
+
+## Skema Basis Data
+![Schema](/asset/SchemaRest.png)
+
+## Endpoint API
+Endpoint API dapat dilihat pada link ini: https://documenter.getpostman.com/view/30701742/2s9YXpUJYa
+
+## Pembagian Tugas
+**Anggota Kelompok**
+
+| Nama                   | NIM      | Panggilan |
+| ---------------------- | -------- | --------- |
+| Cetta Reswara Parahita | 13521133 | Cetta     |
+| Nicholas Liem          | 13521135 | Nicholas  |
+| Haziq Abiyyu Mahdy     | 13521170 | Haziq     |
+
+| NIM      | Nama     | Fungsionalitas                                                                                                                        |
+|----------|----------|---------------------------------------------------------------------------------------------------------------------------------------|
+| 13521135 | Nicholas | Database Design, Architecture Design <br/>(Docker, Setup, <br/>Folder Structuring, etc)                                               |
+| 13521135 | Nicholas | Adapters, Routing, Services, Repositories, <br/>Containers, Logging, Middlewares, Caching                                             |
+| 13521135 | Nicholas | Handlers, Services, Repositories, and Entities: <br/>Category, <br/>Content, <br/>Genre, <br/>Sponsor, <br/> Subscription, <br/> User |
+| 13521170 | Haziq    | Handlers, Services, Repositories, and Entities:                                                                                       |
+
+
+## Penggunaan Redis sebagai Tembolok (Read Through)
+![Redis](/asset/Redis-Simple-UseCase.png)
+
 ## Cara Menginstall dan Menjalankan Program - How to Install and Run The Program
 
 1. Clone this repository

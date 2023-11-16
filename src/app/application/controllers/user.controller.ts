@@ -106,12 +106,21 @@ export class UserController {
             }
 
             const { ...updatedUser } = UpdateUserSchema.parse(req.body);
+
+            let updateProfilePicture = false
             // @ts-ignore
-            updatedUser.pp_url = req.files['picture_file'] ? req.files['picture_file'][0].path : null
+            if (req.files["picture_file"]) {
+                // @ts-ignore
+                updatedUser.pp_url =  req.files['picture_file'][0].path
+                updateProfilePicture = true
+            }
+
             const success = await this.userService.updateUser(
                 userId,
-                updatedUser
+                updatedUser,
+                updateProfilePicture
             );
+           
             if (success) {
                 return ResponseUtil.sendResponse(
                     res,
@@ -123,6 +132,7 @@ export class UserController {
                 return ResponseUtil.sendError(res, 404, "User not found", null);
             }
         } catch (error) {
+            console.log(error)
             handle_error(res, error);
         }
     }
@@ -148,6 +158,7 @@ export class UserController {
     async getUserById(req: Request, res: Response) {
         try {
             const id = parseInt(req.params.id, 10);
+            console.log(req.params)
             const user = await this.userService.findUserById(id);
             //@ts-ignore
             if (id !== req.userId && !req.isAdmin){

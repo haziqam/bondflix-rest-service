@@ -16,7 +16,7 @@ export class UserRepositoryPrisma implements UserRepository {
     }
 
     async findById(id: number) {
-        return prisma.user.findUnique({ where: { id } });
+        return prisma.user.findUnique({ where: { id: id } });
     }
 
     async findByUsername(username: string) {

@@ -80,14 +80,15 @@ export class UserService {
          return true;
     }
 
-    async updateUser(id: number, updatedUser: Partial<User>): Promise<boolean> {
+    async updateUser(id: number, updatedUser: Partial<User>, updateProfilePicture: boolean): Promise<boolean> {
+        console.log(id)
         const existingUser = await this.userRepository.findById(id);
         if (!existingUser) {
             return false;
         }
 
         // Kalo udah ada filenya apus, terus upload yang baru
-        if (existingUser.pp_url !== "default.png") {
+        if (updateProfilePicture && existingUser.pp_url !== "default.png") {
             await deleteFile(existingUser.pp_url)
         }
 

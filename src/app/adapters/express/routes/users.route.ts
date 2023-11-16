@@ -23,7 +23,7 @@ export function userRoutes(controller: UserController): Router {
     /**
      * Get user by ID
      */
-    router.get('/:id', admin_jwt_middleware, (req: Request, res: Response) => {
+    router.get('/:id', user_jwt_middleware, (req: Request, res: Response) => {
         controller.getUserById(req, res).then(() => {});
     });
 

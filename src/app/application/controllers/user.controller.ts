@@ -149,6 +149,11 @@ export class UserController {
         try {
             const id = parseInt(req.params.id, 10);
             const user = await this.userService.findUserById(id);
+            //@ts-ignore
+            if (id !== req.userId && !req.isAdmin){
+                return ResponseUtil.sendError(res, 401, "Unauthorized", null)
+            }
+
             if (user) {
                 return ResponseUtil.sendResponse(
                     res,

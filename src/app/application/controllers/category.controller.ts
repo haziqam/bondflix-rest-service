@@ -5,6 +5,7 @@ import {CreateCategorySchema} from "../../schema/category/create_category.schema
 import {UpdateCategorySchema} from "../../schema/category/update_category.schema";
 import {SearchCategoryByNameSchema} from "../../schema/category/search_category_by_name.schema";
 import {handle_error} from "../../utils/handle_error.utils";
+import {RedisClient} from "../../adapters/redis/redis.client";
 
 export class CategoryController {
     private categoryService: CategoryService;
@@ -96,9 +97,22 @@ export class CategoryController {
 
     async getAllCategory(req: Request, res: Response) {
         try {
-            const allCategory = await this.categoryService.getAllCategories();
+            const redisClient = RedisClient.getInstance();
+            let allCategoryString = await redisClient.get("allCategory");
 
-            if (allCategory && allCategory.length > 0) {
+            let allCategory;
+            if (allCategoryString == null) {
+                allCategory = await this.categoryService.getAllCategories();
+
+                if (allCategory && allCategory.length > 0) {
+                    allCategoryString = JSON.stringify(allCategory);
+                    await redisClient.set("allCategory", allCategoryString, 30); // Cache for 30 seconds
+                }
+            } else {
+                allCategory = JSON.parse(allCategoryString);
+            }
+
+            if (allCategory) {
                 return ResponseUtil.sendResponse(res, 200, 'Success', allCategory);
             } else {
                 return ResponseUtil.sendResponse(res, 404, 'No category found', null);
@@ -107,5 +121,6 @@ export class CategoryController {
             handle_error(res, error);
         }
     }
+
 
 }

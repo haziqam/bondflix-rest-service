@@ -3,7 +3,6 @@ import {UserController} from "../../../application/controllers/user.controller";
 import {admin_jwt_middleware} from "../middlewares/admin_jwt_auth.middleware";
 import {uploadFile} from "../../../utils/upload_file.utils";
 import {user_jwt_middleware} from "../middlewares/user_jwt_auth.middleware";
-import {ResponseUtil} from "../../../utils/response.utils";
 import {get_subscriber_email_middleware} from "../middlewares/get_subscriber_email.middleware";
 
 export function userRoutes(controller: UserController): Router {

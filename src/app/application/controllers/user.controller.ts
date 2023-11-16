@@ -158,7 +158,6 @@ export class UserController {
     async getUserById(req: Request, res: Response) {
         try {
             const id = parseInt(req.params.id, 10);
-            console.log(req.params)
             const user = await this.userService.findUserById(id);
             //@ts-ignore
             if (id !== req.userId && !req.isAdmin){

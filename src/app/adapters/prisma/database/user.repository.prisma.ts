@@ -15,12 +15,40 @@ export class UserRepositoryPrisma implements UserRepository {
         return prisma.user.findFirst({ where: { email } });
     }
 
-    async findById(id: number) {
-        return prisma.user.findUnique({ where: { id: id } });
+    async findById(id: number): Promise<User | null> {
+        //@ts-ignore
+        return prisma.user.findUnique({
+            where: {
+                id: id
+            },
+            select: {
+                id: true,
+                username: true,
+                pp_url: true,
+                name: true,
+                email: false,
+                isAdmin: false,
+                hashedPassword: false,
+            }
+        });
     }
 
-    async findByUsername(username: string) {
-        return prisma.user.findFirst({ where: { username } });
+    async findByUsername(username: string): Promise<User | null> {
+        //@ts-ignore
+        return prisma.user.findFirst({
+            where: {
+                username: username,
+            },
+            select: {
+                id: true,
+                username: true,
+                pp_url: true,
+                name: true,
+                email: false,
+                isAdmin: false,
+                hashedPassword: false,
+            }
+        });
     }
 
     async update(user : Partial<User>) {

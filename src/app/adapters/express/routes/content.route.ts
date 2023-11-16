@@ -34,6 +34,13 @@ export function contentRoutes(controller: ContentController): Router {
     });
 
     /**
+     * Get content by title
+     */
+    router.get('/search', user_jwt_middleware, (req: Request, res: Response) => {
+        controller.getContentsByTitle(req, res).then(() => {});
+    })
+
+    /**
      * Get content by id
      */
     router.get('/:id', user_jwt_middleware, (req: Request, res: Response) => {

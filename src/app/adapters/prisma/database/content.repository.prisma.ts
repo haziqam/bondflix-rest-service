@@ -12,15 +12,24 @@ export class ContentRepositoryPrisma implements ContentRepository {
         await prisma.content.delete({ where: { id } });
     }
 
-    async findByTitle(title: string) {
-        return prisma.content.findFirst({
-            where: { title },
-            include: {
-                user: true,
-                genres: true,
-                categories: true,
-                sponsors: true
+    async findByTitle(title: string): Promise<Content | null> {
+        // @ts-ignore
+        return prisma.content.findMany({
+            where: {
+                title: {
+                    contains: title,
+                }
             },
+            select: {
+                id: true,
+                creator_id: true,
+                title: true,
+                description: true,
+                visibility: true,
+                content_file_path: true,
+                thumbnail_file_path: true,
+                uploaded_at: true,
+            }
         });
     }
 

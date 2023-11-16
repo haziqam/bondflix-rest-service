@@ -47,6 +47,10 @@ export class ContentService {
         return true;
     }
 
+    async findContentsByTitle(title: string) {
+        return await this.contentRepository.findByTitle(title);
+    }
+
     async addAssociation(contentId: number, genres: number[], categories: number[], sponsors: number[]): Promise<boolean> {
         const existingContent = await this.contentRepository.findById(contentId);
         if (!existingContent) {

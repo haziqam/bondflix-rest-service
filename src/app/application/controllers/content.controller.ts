@@ -175,6 +175,7 @@ export class ContentController {
         }
     }
 
+
     async getAllContent(req: Request, res: Response) {
         try {
             const redisClient = RedisClient.getInstance();
@@ -197,6 +198,25 @@ export class ContentController {
             } else {
                 return ResponseUtil.sendResponse(res, 404, 'No content found', null);
             }
+        } catch (error) {
+            handle_error(res, error);
+        }
+    }
+
+    async getContentsByTitle(req: Request, res: Response) {
+        try {
+            const title = req.query.title;
+            let contentsByTitle;
+            if (title !== undefined) {
+                //@ts-ignore
+                contentsByTitle = await this.contentService.findContentsByTitle(title);
+            }
+            if (contentsByTitle !== undefined) {
+                return ResponseUtil.sendResponse(res, 200, "Successfully get content", contentsByTitle);
+            } else {
+                return ResponseUtil.sendError(res, 404, "Content not found", null);
+            }
+
         } catch (error) {
             handle_error(res, error);
         }

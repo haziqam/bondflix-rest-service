@@ -26,7 +26,7 @@ export class UserRepositoryPrisma implements UserRepository {
                 username: true,
                 pp_url: true,
                 name: true,
-                email: false,
+                email: true,
                 isAdmin: false,
                 hashedPassword: false,
             }

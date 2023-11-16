@@ -8,7 +8,7 @@ async function main() {
     const alice = await prisma.user.create({
         data: {
             username: 'Alice',
-            pp_url: 'alice_profile.png',
+            pp_url: 'default.png',
             name: 'Alice Wonderland',
             email: 'alice@example.com',
             isAdmin: false,
@@ -19,7 +19,7 @@ async function main() {
     const bob = await prisma.user.create({
         data: {
             username: 'Bob',
-            pp_url: 'bob_profile.png',
+            pp_url: 'default.png',
             name: 'Bob Builder',
             email: 'bob@example.com',
             isAdmin: true,
@@ -32,8 +32,8 @@ async function main() {
             user: { connect: { id: alice.id } },
             title: 'Journey to the West',
             description: 'A mystical journey story',
-            content_file_path: 'content/journey_to_the_west.pdf',
-            thumbnail_file_path: 'thumbnails/journey_to_the_west.png',
+            content_file_path: 'uploads/content/default.mp4',
+            thumbnail_file_path: 'uploads/thumbnails/default.png',
             uploaded_at: new Date(),
             visibility: true,
         },
@@ -44,8 +44,8 @@ async function main() {
             user: { connect: { id: bob.id } },
             title: 'Building Basics',
             description: 'A guide to basic building',
-            content_file_path: 'content/building_basics.pdf',
-            thumbnail_file_path: 'thumbnails/building_basics.png',
+            content_file_path: 'uploads/content/default.mp4',
+            thumbnail_file_path: 'uploads/thumbnails/default.png',
             uploaded_at: new Date(),
             visibility: true,
         },

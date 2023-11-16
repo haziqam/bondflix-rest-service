@@ -19,12 +19,13 @@ export class ContentRepositoryPrisma implements ContentRepository {
                 user: true,
                 genres: true,
                 categories: true,
+                sponsors: true
             },
         });
     }
 
     async findById(id: number) {
-        if (typeof id !== "number" || isNaN(id)) {
+        if (isNaN(id)) {
             throw new Error(`Invalid ID: ${id}`);
         }
 
@@ -34,6 +35,7 @@ export class ContentRepositoryPrisma implements ContentRepository {
                 user: true,
                 genres: true,
                 categories: true,
+                sponsors: true
             },
         });
     }
@@ -58,6 +60,7 @@ export class ContentRepositoryPrisma implements ContentRepository {
                 user: true,
                 genres: true,
                 categories: true,
+                sponsors: true
             },
         });
     }
@@ -86,6 +89,33 @@ export class ContentRepositoryPrisma implements ContentRepository {
             });
         } else {
             throw new Error("No valid genre IDs provided.");
+        }
+    }
+
+    async associateSponsors(contentId: number, sponsors: number[]): Promise<void> {
+        const validSponsors = [];
+        for (const sponsorId of sponsors) {
+            const sponsorExist = await prisma.sponsor.findUnique({
+                where: { id: sponsorId },
+            });
+            if (sponsorExist) {
+                validSponsors.push(sponsorId);
+            } else {
+                console.warn(`Sponsor ID ${sponsorId} does not exist.`);
+            }
+        }
+
+        if (validSponsors.length > 0) {
+            await prisma.content.update({
+                where: { id: contentId },
+                data: {
+                    sponsors: {
+                        connect: validSponsors.map((id) => ({ id })),
+                    },
+                },
+            });
+        } else {
+            throw new Error("No valid sponsor IDs provided.");
         }
     }
 

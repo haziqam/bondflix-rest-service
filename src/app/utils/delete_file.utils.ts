@@ -7,7 +7,7 @@ export const deleteFile = (filename: string): Promise<void> => {
         fs.unlink(filePath, (err) => {
             if (err) {
                 reject(err);
-                throw Error("File not found, can't be deleted")
+                return
             }
             resolve();
         });

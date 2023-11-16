@@ -9,5 +9,6 @@ export interface ContentRepository {
     delete(id: number): Promise<void>;
     associateGenres(contentId: number, genres: number[]): Promise<void>;
     associateCategories(contentId: number, categories: number[]): Promise<void>;
+    associateSponsors(contentId: number, sponsors: number[]): Promise<void>;
     findContentByCreatorId(creatorId: number): Promise<Content[] | null>;
 }

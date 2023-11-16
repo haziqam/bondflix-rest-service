@@ -20,7 +20,7 @@ CREATE TABLE "Content" (
     "creator_id" INTEGER NOT NULL,
     "title" TEXT NOT NULL,
     "description" TEXT NOT NULL,
-    "release_date" TIMESTAMP(3) NOT NULL,
+    "visibility" BOOLEAN NOT NULL,
     "content_file_path" TEXT NOT NULL,
     "thumbnail_file_path" TEXT NOT NULL,
     "uploaded_at" TIMESTAMP(3) NOT NULL,

@@ -32,10 +32,10 @@ async function main() {
             user: { connect: { id: alice.id } },
             title: 'Journey to the West',
             description: 'A mystical journey story',
-            release_date: new Date('2021-01-01'),
             content_file_path: 'content/journey_to_the_west.pdf',
             thumbnail_file_path: 'thumbnails/journey_to_the_west.png',
             uploaded_at: new Date(),
+            visibility: true,
         },
     })
 
@@ -44,10 +44,10 @@ async function main() {
             user: { connect: { id: bob.id } },
             title: 'Building Basics',
             description: 'A guide to basic building',
-            release_date: new Date('2022-01-01'),
             content_file_path: 'content/building_basics.pdf',
             thumbnail_file_path: 'thumbnails/building_basics.png',
             uploaded_at: new Date(),
+            visibility: true,
         },
     })
 

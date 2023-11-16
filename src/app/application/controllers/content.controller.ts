@@ -20,13 +20,17 @@ export class ContentController {
     }
     async createContent(req: Request, res: Response) {
         try {
-            let { title, description, genres, categories } = req.body;
+            let { title, description, visibility, genres, categories, sponsors } = req.body;
             //@ts-ignore
             const creator_id = parseInt(req.userId, 10)
-            const release_date = new Date(req.body.release_date);
+
+            //turn visibility into boolean
+            const trueValues = ['true', 'yes', '1'];
+            visibility = trueValues.includes(visibility.toLowerCase());
 
             genres = typeof genres === 'string' ? parseToArray(genres) : [];
             categories = typeof categories === 'string' ? parseToArray(categories) : [];
+            sponsors = typeof sponsors === 'string' ? parseToArray(sponsors): []
 
             // @ts-ignore
             const contentFilePath = req.files['content_file'] ? req.files['content_file'][0].path : null;
@@ -42,13 +46,13 @@ export class ContentController {
                 title,
                 creator_id,
                 description,
-                release_date,
+                visibility,
                 contentFilePath,
                 thumbnailFilePath
             );
 
             if (createdContent) {
-                await this.contentService.addGenresAndCategories(createdContent.id, genres, categories);
+                await this.contentService.addAssociation(createdContent.id, genres, categories, sponsors);
                 return ResponseUtil.sendResponse(res, 201, 'Content created successfully', createdContent);
             } else {
                 return ResponseUtil.sendError(res, 500, 'Content creation failed', null);
@@ -72,15 +76,25 @@ export class ContentController {
             }
 
             const { ...updatedContent } = UpdateContentSchema.parse(req.body);
-            if ('release_date' in updatedContent) {
+            //@ts-ignore
+            if (updatedContent.visibility) {
+                const trueValues = ['true', 'yes', '1'];
                 // @ts-ignore
-                updatedContent.release_date = new Date(updatedContent.release_date);
+                updatedContent.visibility = trueValues.includes(updatedContent.visibility.toLowerCase());
             }
 
             //@ts-ignore
-            updatedContent.content_file_path = req.files['content_file'] ? req.files['content_file'][0].path : null;
-            // @ts-ignore
-            updatedContent.thumbnail_file_path = req.files['thumbnail_file'] ? req.files['thumbnail_file'][0].path : null;
+            if (req.files['content_file']) {
+                //@ts-ignore
+                updatedContent.content_file_path = req.files['content_file'][0].path;
+            }
+
+            // Update thumbnail_file_path only if a new file is provided
+            //@ts-ignore
+            if (req.files['thumbnail_file']) {
+                //@ts-ignore
+                updatedContent.thumbnail_file_path = req.files['thumbnail_file'][0].path;
+            }
 
             if (updatedContent.creator_id) {
                 const creator = await this.userService.findUserById(updatedContent.creator_id);

@@ -13,7 +13,7 @@ export class ContentService {
         title: string,
         creator_id: number,
         description: string,
-        releaseDate: Date,
+        visibility: boolean,
         contentFilePath: string,
         thumbnailFilePath: string
     ): Promise<Content | null> {
@@ -22,7 +22,7 @@ export class ContentService {
             title: title,
             creator_id: creator_id,
             description: description,
-            release_date: releaseDate,
+            visibility: visibility,
             content_file_path: contentFilePath,
             thumbnail_file_path: thumbnailFilePath,
             uploaded_at: new Date(),
@@ -38,9 +38,7 @@ export class ContentService {
         }
 
         if (existingContent.content_file_path !== null && existingContent.thumbnail_file_path !== null) {
-            // @ts-ignore
             await deleteFile(existingContent.content_file_path)
-            // @ts-ignore
             await deleteFile(existingContent.thumbnail_file_path)
         }
 
@@ -49,7 +47,7 @@ export class ContentService {
         return true;
     }
 
-    async addGenresAndCategories(contentId: number, genres: number[], categories: number[]): Promise<boolean> {
+    async addAssociation(contentId: number, genres: number[], categories: number[], sponsors: number[]): Promise<boolean> {
         const existingContent = await this.contentRepository.findById(contentId);
         if (!existingContent) {
             return false;
@@ -57,6 +55,7 @@ export class ContentService {
         try {
             await this.contentRepository.associateGenres(contentId, genres);
             await this.contentRepository.associateCategories(contentId, categories);
+            await this.contentRepository.associateSponsors(contentId, sponsors);
             return true;
         } catch (error) {
             console.error('Error associating genres and categories:', error);

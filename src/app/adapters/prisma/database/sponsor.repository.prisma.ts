@@ -20,7 +20,7 @@ export class SponsorRepositoryPrisma implements SponsorRepository {
     }
 
     async findById(id: number) {
-        return prisma.sponsor.findUnique({ where: { id } });
+        return prisma.sponsor.findFirst({ where: { id } });
     }
 
     async findByName(name: string) {

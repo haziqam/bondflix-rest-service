@@ -61,4 +61,13 @@ export class SoapClient {
         }
         return await this.soapUtils.call("getSubscribersByCreatorId", args);
     }
+
+    async notify(
+        creatorId: number,
+    ): Promise<Object> {
+        const args = {
+            creatorId: creatorId,
+        }
+        return await this.soapUtils.call('notify', args);
+    }
 }

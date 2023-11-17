@@ -7,6 +7,7 @@ import {handle_error} from "../../utils/handle_error.utils";
 import {RedisClient} from "../../adapters/redis/redis.client";
 import {parseToArray} from "../../utils/parse_array.utils";
 import {SubscriptionService} from "../services/subscription.service";
+import {SoapClient} from "../../adapters/soap/soap.client";
 
 export class ContentController {
     private contentService: ContentService;
@@ -53,6 +54,9 @@ export class ContentController {
 
             if (createdContent) {
                 await this.contentService.addAssociation(createdContent.id, genres, categories, sponsors);
+
+                await SoapClient.getInstance().notify(creator_id);
+
                 return ResponseUtil.sendResponse(res, 201, 'Content created successfully', createdContent);
             } else {
                 return ResponseUtil.sendError(res, 500, 'Content creation failed', null);

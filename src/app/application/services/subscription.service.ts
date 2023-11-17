@@ -16,6 +16,7 @@ export class SubscriptionService {
         if (!existingCreator) {
             return false;
         }
+
         return await SoapClient.getInstance().addCreatorSubscriberRelationship(
             existingCreator.id,
             existingUser.id

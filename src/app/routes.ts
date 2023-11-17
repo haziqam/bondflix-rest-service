@@ -25,7 +25,7 @@ export function routes(app: Express, container: ServiceContainer){
     const genreController = new GenreController(container.getGenreService());
     const categoryController = new CategoryController(container.getCategoryService());
     const sponsorController = new SponsorController(container.getSponsorService());
-    const subscriptionController = new SubscriptionController(container.getSubscriptionService());
+    const subscriptionController = new SubscriptionController(container.getSubscriptionService(), container.getUserService());
 
     app.use('/api/v1/users', userRoutes(userController));
     app.use('/api/v1/auth', authRoutes(userController));

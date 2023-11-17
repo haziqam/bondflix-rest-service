@@ -2,12 +2,15 @@ import {Request, Response} from "express";
 import {ResponseUtil} from "../../utils/response.utils";
 import {handle_error} from "../../utils/handle_error.utils";
 import {SubscriptionService} from "../services/subscription.service";
+import {UserService} from "../services/user.service";
 
 export class SubscriptionController {
     private subscriptionService: SubscriptionService;
+    private userService: UserService
 
-    constructor(subscriptionService: SubscriptionService) {
+    constructor(subscriptionService: SubscriptionService, userService: UserService) {
         this.subscriptionService = subscriptionService;
+        this.userService = userService;
     }
 
     async subscribe(req: Request, res: Response) {
@@ -41,17 +44,24 @@ export class SubscriptionController {
             }
 
             const subscriberIds = await this.subscriptionService.getSubscribers(creatorId);
-            if (subscriberIds) {
-                return ResponseUtil.sendResponse(res, 200, "Subscriber list", subscriberIds)
+            if (subscriberIds && Array.isArray(subscriberIds)) {
+                const subscriberDetails = [];
+
+                for (const id of subscriberIds) {
+                    const parsedId = parseInt(id, 10);
+                    const userDetails = await this.userService.findUserById(parsedId);
+                    subscriberDetails.push(userDetails);
+                }
+
+                return ResponseUtil.sendResponse(res, 200, "Subscriber list", subscriberDetails);
             } else {
-                return ResponseUtil.sendError(res, 500, "Can't get subscribers", null)
+                return ResponseUtil.sendError(res, 500, "Can't get subscribers", null);
             }
-
-
         } catch (error) {
-            handle_error(res, error)
+            handle_error(res, error);
         }
     }
+
 
     async isSubscribed(req: Request, res: Response) {
         try {

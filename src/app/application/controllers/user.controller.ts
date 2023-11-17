@@ -222,6 +222,10 @@ export class UserController {
                 res.cookie("userId", decoded.payload.userId, {
                     maxAge: JWT_COOKIE_MAX_AGE,
                 })
+                //@ts-ignore
+                res.cookie("isAdmin", decoded.payload.isAdmin,  {
+                    maxAge: JWT_COOKIE_MAX_AGE,
+                })
 
                 if (decoded) {
                     return ResponseUtil.sendResponse(

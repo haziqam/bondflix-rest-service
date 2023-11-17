@@ -11,6 +11,9 @@ export function access_picture_middleware(userService: UserService) {
 
             //@ts-ignore
             const userId = parseInt(req.query.id, 10);
+            if (userId === undefined){
+                return ResponseUtil.sendResponse(res, 200, "", null);
+            }
             const userData = await userService.findUserById(userId);
             //@ts-ignore
             req.filePath = userData?.pp_url;

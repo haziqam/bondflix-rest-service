@@ -27,7 +27,6 @@ services:
       - /app/node_modules
     ports:
       - "3000:3000"
-    command: yarn start
     depends_on:
       - rest_db
     networks:
@@ -50,3 +49,5 @@ volumes:
 networks:
   rest-network:
     driver: bridge
+  bondflix-soap-service_soap-network:
+    external: true

@@ -97,4 +97,25 @@ export class UserRepositoryPrisma implements UserRepository {
     async findAll() {
         return prisma.user.findMany();
     }
+
+    async findUsersByIds(userIds: number[]): Promise<Object> {
+        const users = await prisma.user.findMany({
+          where: {
+            id: {
+              in: userIds,
+            },
+          },
+          select: {
+            id: true,
+            username: true,
+            pp_url: true,
+            name: true,
+            email: false,
+            isAdmin: false,
+            hashedPassword: false,
+          },
+        });
+      
+        return users;
+      }
 }

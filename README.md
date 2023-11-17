@@ -22,8 +22,8 @@ Endpoint API dapat dilihat pada link ini: https://documenter.getpostman.com/view
 |----------|----------|---------------------------------------------------------------------------------------------------------------------------------------|
 | 13521135 | Nicholas | Database Design, Architecture Design <br/>(Docker, Setup, <br/>Folder Structuring, etc)                                               |
 | 13521135 | Nicholas | Adapters, Routing, Services, Repositories, <br/>Containers, Logging, Middlewares, Caching                                             |
-| 13521135 | Nicholas | Handlers, Services, Repositories, and Entities: <br/>Category, <br/>Content, <br/>Genre, <br/>Sponsor, <br/> Subscription, <br/> User |
-| 13521170 | Haziq    | Handlers, Services, Repositories, and Entities:                                                                                       |
+| 13521135 | Nicholas | Handlers, Services, Repositories, and Entities: <br/>Category, <br/>Content, <br/>Genre, <br/> Subscription, <br/> User |
+| 13521170 | Haziq    | Handlers, Services, Repositories, and Entities: <br/>Sponsor, <br/>Authorization, <br/>Database                                                                                       |
 
 
 ## Penggunaan Redis sebagai Tembolok (Read Through)

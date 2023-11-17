@@ -166,6 +166,7 @@ export class ContentRepositoryPrisma implements ContentRepository {
             include: {
                 genres: true,
                 categories: true,
+                sponsors: true
             }
         })
     }

@@ -21,6 +21,8 @@ export class CategoryController {
             const createdCategory = await this.categoryService.createCategory(name);
 
             if (createdCategory) {
+                const redisClient = RedisClient.getInstance();
+                await redisClient.del("allCategory");
                 return ResponseUtil.sendResponse(res, 201, 'Category created successfully', createdCategory);
             } else {
                 return ResponseUtil.sendError(res, 500, 'Category creation failed', null);
@@ -39,6 +41,8 @@ export class CategoryController {
             const success = await this.categoryService.updateCategory(categoryId, updatedCategory);
 
             if (success) {
+                const redisClient = RedisClient.getInstance();
+                await redisClient.del("allCategory");
                 return ResponseUtil.sendResponse(res, 200, 'Category updated successfully', null);
             } else {
                 return ResponseUtil.sendError(res, 404, 'Category not found or update failed', null);
@@ -53,6 +57,8 @@ export class CategoryController {
             const categoryId = parseInt(req.params.id, 10);
             const success = await this.categoryService.deleteCategory(categoryId);
             if (success) {
+                const redisClient = RedisClient.getInstance();
+                await redisClient.del("allCategory");
                 return ResponseUtil.sendResponse(res, 200, 'Category deleted successfully', null);
             } else {
                 return ResponseUtil.sendError(res, 404, 'Category not found or deletion failed', null);

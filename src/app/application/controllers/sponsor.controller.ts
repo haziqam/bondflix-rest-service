@@ -21,6 +21,8 @@ export class SponsorController {
             const createdSponsor = await this.sponsorService.createSponsor(name, sponsor_status, link);
 
             if (createdSponsor) {
+                const redisClient = RedisClient.getInstance();
+                await redisClient.del("allSponsor");
                 return ResponseUtil.sendResponse(res, 201, 'Sponsor created successfully', createdSponsor);
             } else {
                 return ResponseUtil.sendError(res, 500, 'Sponsor creation failed', null);
@@ -40,6 +42,8 @@ export class SponsorController {
             const success = await this.sponsorService.updateSponsor(sponsorId, updatedSponsor);
 
             if (success) {
+                const redisClient = RedisClient.getInstance();
+                await redisClient.del("allSponsor");
                 return ResponseUtil.sendResponse(res, 200, 'Sponsor updated successfully', null);
             } else {
                 return ResponseUtil.sendError(res, 404, 'Sponsor not found or update failed', null);
@@ -54,6 +58,8 @@ export class SponsorController {
             const sponsorId = parseInt(req.params.id, 10);
             const success = await this.sponsorService.deleteSponsor(sponsorId);
             if (success) {
+                const redisClient = RedisClient.getInstance();
+                await redisClient.del("allSponsor");
                 return ResponseUtil.sendResponse(res, 200, 'Sponsor deleted successfully', null);
             } else {
                 return ResponseUtil.sendError(res, 404, 'Sponsor not found or deletion failed', null);
@@ -106,7 +112,7 @@ export class SponsorController {
                 allSponsor = await this.sponsorService.getAllSponsors();
 
                 allSponsorString = JSON.stringify(allSponsor);
-                await redisClient.set("allSponsor", allSponsorString, 300);
+                await redisClient.set("allSponsor", allSponsorString, 30);
             } else {
                 allSponsor = JSON.parse(allSponsorString);
             }

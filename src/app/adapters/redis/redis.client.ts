@@ -35,4 +35,8 @@ export class RedisClient {
     public async get(key: string): Promise<string | null> {
         return await this.client.get(key);
     }
+
+    public async del(key: string): Promise<void> {
+        await this.client.del(key);
+    }
 }

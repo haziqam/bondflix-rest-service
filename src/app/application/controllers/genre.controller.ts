@@ -22,6 +22,8 @@ export class GenreController {
             );
 
             if (createdGenre) {
+                const redisClient = RedisClient.getInstance();
+                await redisClient.del("allGenre");
                 return ResponseUtil.sendResponse(res, 201, 'Genre created successfully', createdGenre);
             } else {
                 return ResponseUtil.sendError(res, 500, 'Genre creation failed', null);
@@ -40,6 +42,8 @@ export class GenreController {
             const success = await this.genreService.updateGenre(genreId, updatedGenre);
 
             if (success) {
+                const redisClient = RedisClient.getInstance();
+                await redisClient.del("allGenre");
                 return ResponseUtil.sendResponse(res, 200, 'Genre updated successfully', null);
             } else {
                 return ResponseUtil.sendError(res, 404, 'Genre not found or update failed', null);
@@ -54,6 +58,8 @@ export class GenreController {
             const genreId = parseInt(req.params.id, 10);
             const success = await this.genreService.deleteGenre(genreId);
             if (success) {
+                const redisClient = RedisClient.getInstance();
+                await redisClient.del("allGenre");
                 return ResponseUtil.sendResponse(res, 200, 'Genre deleted successfully', null);
             } else {
                 return ResponseUtil.sendError(res, 404, 'Genre not found or deletion failed', null);
@@ -107,7 +113,7 @@ export class GenreController {
 
                 if (allGenre && allGenre.length > 0) {
                     allGenreString = JSON.stringify(allGenre);
-                    await redisClient.set("allGenre", allGenreString, 300);
+                    await redisClient.set("allGenre", allGenreString, 30);
                 }
             } else {
                 allGenre = JSON.parse(allGenreString);

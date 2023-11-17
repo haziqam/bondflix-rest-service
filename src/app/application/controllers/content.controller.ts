@@ -53,6 +53,8 @@ export class ContentController {
             );
 
             if (createdContent) {
+                const redisClient = RedisClient.getInstance();
+                await redisClient.del("allContent");
                 await this.contentService.addAssociation(createdContent.id, genres, categories, sponsors);
 
                 await SoapClient.getInstance().notify(creator_id);
@@ -110,6 +112,8 @@ export class ContentController {
             //@ts-ignore
             const success = await this.contentService.updateContent(contentId, updatedContent);
             if (success) {
+                const redisClient = RedisClient.getInstance();
+                await redisClient.del("allContent");
                 return ResponseUtil.sendResponse(res, 200, 'Content updated successfully', null);
             } else {
                 return ResponseUtil.sendError(res, 404, 'Content not found or update failed', null);
@@ -134,6 +138,8 @@ export class ContentController {
 
             const success = await this.contentService.deleteContent(contentId);
             if (success) {
+                const redisClient = RedisClient.getInstance();
+                await redisClient.del("allContent");
                 return ResponseUtil.sendResponse(res, 200, 'Content deleted successfully', null);
             } else {
                 return ResponseUtil.sendError(res, 404, 'Content not found or deletion failed', null);

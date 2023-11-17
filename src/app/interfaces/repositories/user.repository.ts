@@ -9,5 +9,6 @@ export interface UserRepository {
     update(user: Partial<User>): Promise<void>;
     delete(id: number): Promise<void>;
     findAll(): Promise<User[] | null>;
-    findUserByName(name: string): Promise<User[] | null>
+    findUserByName(name: string): Promise<User[] | null>;
+    findUsersByIds(userIds: number[]): Promise<Object>;
 }

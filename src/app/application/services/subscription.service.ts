@@ -1,5 +1,5 @@
-import {UserRepository} from "../../interfaces/repositories/user.repository";
-import {SoapClient} from "../../adapters/soap/soap.client";
+import { UserRepository } from "../../interfaces/repositories/user.repository";
+import { SoapClient } from "../../adapters/soap/soap.client";
 
 export class SubscriptionService {
     private userRepository: UserRepository;
@@ -42,15 +42,26 @@ export class SubscriptionService {
         );
     }
 
-    async getSubscribers(
-        creatorId: number
-    ): Promise<Object> {
+    async getSubscribers(creatorId: number): Promise<Object | null> {
         const existingCreator = await this.userRepository.findById(creatorId);
         if (!existingCreator) {
             return false;
         }
-        return await SoapClient.getInstance().getAllSubscriberFromCreator(
-            creatorId
-        );
+        const subscriberIds =
+            (await SoapClient.getInstance().getAllSubscriberFromCreator(
+                creatorId
+            )) as any;
+
+        const subscriberIdList: number[] = [];
+
+        for (const key in subscriberIds) {
+            // console.log(subscriberIds[key]);
+            subscriberIdList.push(parseInt(subscriberIds[key], 10));
+        }
+
+        // console.log(subscriberIdList)
+        // return await this.userRepository.findById(subscriberIdList[0])
+
+        return await this.userRepository.findUsersByIds(subscriberIdList);
     }
 }

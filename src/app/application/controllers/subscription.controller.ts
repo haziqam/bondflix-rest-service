@@ -44,18 +44,10 @@ export class SubscriptionController {
             }
 
             const subscriberIds = await this.subscriptionService.getSubscribers(creatorId);
-            if (subscriberIds && Array.isArray(subscriberIds)) {
-                const subscriberDetails = [];
-
-                for (const id of subscriberIds) {
-                    const parsedId = parseInt(id, 10);
-                    const userDetails = await this.userService.findUserById(parsedId);
-                    subscriberDetails.push(userDetails);
-                }
-
-                return ResponseUtil.sendResponse(res, 200, "Subscriber list", subscriberDetails);
+            if (subscriberIds) {
+                return ResponseUtil.sendResponse(res, 200, "Subscriber list", subscriberIds)
             } else {
-                return ResponseUtil.sendError(res, 500, "Can't get subscribers", null);
+                return ResponseUtil.sendError(res, 500, "Can't get subscribers", null)
             }
         } catch (error) {
             handle_error(res, error);
